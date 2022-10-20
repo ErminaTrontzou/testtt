@@ -70,7 +70,7 @@ public class User {
     }
 
     @Column(name = "password")
-    private String getPassword(){
+    public String getPassword(){
         return this.password;
     }
     public void setPassword(String newPassword){

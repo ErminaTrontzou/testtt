@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.NoSuchElementException;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<User> list(){
@@ -35,6 +38,7 @@ public class UserController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> add(@RequestBody User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
@@ -44,6 +48,7 @@ public class UserController {
         try {
             User existUser = userService.getUser(id);
             user.setId(id);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(user);
             User updatedUser = userService.getUser(id);
             return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
