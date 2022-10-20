@@ -16,12 +16,14 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("")
+//    @GetMapping("")
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<User> list(){
         return userService.listAllUsers();
     }
 
-    @GetMapping("/{id}")
+//    @GetMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> get (@PathVariable Integer id){
         try {
             User user = userService.getUser(id);
@@ -31,12 +33,14 @@ public class UserController {
         }
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public void add(@RequestBody User user){
         userService.saveUser(user);
     }
 
-    @PutMapping("/{id}")
+//    @PutMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestBody User user, @PathVariable Integer id){
         try {
             User existUser = userService.getUser(id);
@@ -48,7 +52,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
+//    @DeleteMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id){
         userService.deleteUser(id);
     }

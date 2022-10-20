@@ -13,6 +13,7 @@ public class User {
     private String password;
     private boolean is_admin;
     private boolean disabled;
+    private static final int encryptFactorLength = 2048;
 
     public User(){}
 
