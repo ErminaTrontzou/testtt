@@ -28,6 +28,8 @@ public class ImageTags {
         this.id = id;
     }
 
+
+
     @Column(name="tag_id")
     public int getTag_id(){
         return this.tag_id;
@@ -43,5 +45,7 @@ public class ImageTags {
     public void setImage_id(int image_id) {
         this.image_id = image_id;
     }
+
+
 }
 

@@ -1,7 +1,9 @@
 package gr.thegoodsideofe1.tourguide.entities;
+import gr.thegoodsideofe1.tourguide.entities.Tag;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="images")
@@ -104,4 +106,13 @@ public class Image {
     public void setDate_taken(String date_taken) {
         this.date_taken = date_taken;
     }
+
+    @ManyToMany
+    @JoinTable(
+            name = "ImageTags",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    Set<Tag> imageTags;
+
 }

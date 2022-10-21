@@ -1,6 +1,7 @@
 package gr.thegoodsideofe1.tourguide.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="tags")
@@ -33,4 +34,7 @@ public class Tag {
     public void setName(String name) {
         this.name = name;
     }
+
+    @ManyToMany(mappedBy = "imageTags")
+    Set<Image> images;
 }
