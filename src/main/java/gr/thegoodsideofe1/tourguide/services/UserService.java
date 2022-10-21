@@ -28,4 +28,8 @@ public class UserService {
     public void deleteUser(Integer id){
         userRepository.deleteById(id);
     }
+
+    public User getUserByEmail(String email){
+        return userRepository.getUserByEmail(email);
+    }
 }

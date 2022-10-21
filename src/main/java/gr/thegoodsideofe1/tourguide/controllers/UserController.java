@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -62,5 +65,42 @@ public class UserController {
         User deletedUser = userService.getUser(id);
         userService.deleteUser(id);
         return new ResponseEntity<User>(deletedUser, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/login/email", method = RequestMethod.POST)
+    public Map<String, String> login(@RequestBody Map<String, String> userLoginDetails) throws NoSuchAlgorithmException {
+        Map<String, String> returnResponse = new HashMap<>();
+        String emailParam = userLoginDetails.get("email");
+        String passwordParam = userLoginDetails.get("password");
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+        User userToLogin = userService.getUserByEmail(emailParam);
+
+        if (userToLogin == null){
+            //Email Does not Exists
+            returnResponse.put("status", "error");
+            returnResponse.put("message", "Email or Password is incorrect");
+            return returnResponse;
+        }
+        //User Exists
+        if (passwordEncoder.matches(passwordParam, userToLogin.getPassword())){
+            //Password Param matches password in DB
+            String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirst_name() + "," + userToLogin.getLast_name();
+            byte[] jwtToken = digest.digest(userDetailsJoined.getBytes(StandardCharsets.UTF_8));
+            returnResponse.put("status", "success");
+            returnResponse.put("token", toHexString(jwtToken));
+        }
+        returnResponse.put("test", String.valueOf(passwordEncoder.matches(passwordParam, userToLogin.getPassword())));
+        return returnResponse;
+    }
+
+    public static String toHexString(byte[] hash){
+        BigInteger number = new BigInteger(1, hash);
+        StringBuilder hexString = new StringBuilder(number.toString(16));
+        while (hexString.length() < 64){
+            hexString.insert(0, '0');
+        }
+        return hexString.toString();
     }
 }
