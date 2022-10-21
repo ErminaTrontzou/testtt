@@ -95,7 +95,35 @@ public class UserController {
         return returnResponse;
     }
 
-    public static String toHexString(byte[] hash){
+    @RequestMapping(value = "/login/username", method = RequestMethod.POST)
+    public Map<String, String> loginUsername(@RequestBody Map<String, String> userLoginDetails) throws NoSuchAlgorithmException {
+        Map<String, String> returnResponse = new HashMap<>();
+        String usernameParam = userLoginDetails.get("username");
+        String passwordParam = userLoginDetails.get("password");
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+        User userToLogin = userService.getUserByUsername(usernameParam);
+
+        if (userToLogin == null){
+            //Email Does not Exists
+            returnResponse.put("status", "error");
+            returnResponse.put("message", "Username or Password is incorrect");
+            return returnResponse;
+        }
+
+        if (passwordEncoder.matches(passwordParam, userToLogin.getPassword())){
+            //Password Param matches password in DB
+            String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirst_name() + "," + userToLogin.getLast_name();
+            byte[] jwtToken = digest.digest(userDetailsJoined.getBytes(StandardCharsets.UTF_8));
+            returnResponse.put("status", "success");
+            returnResponse.put("token", toHexString(jwtToken));
+        }
+        returnResponse.put("test", String.valueOf(passwordEncoder.matches(passwordParam, userToLogin.getPassword())));
+        return returnResponse;
+    }
+
+    private static String toHexString(byte[] hash){
         BigInteger number = new BigInteger(1, hash);
         StringBuilder hexString = new StringBuilder(number.toString(16));
         while (hexString.length() < 64){
