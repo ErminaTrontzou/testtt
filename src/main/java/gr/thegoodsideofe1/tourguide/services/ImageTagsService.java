@@ -20,4 +20,8 @@ public class ImageTagsService {
     public ImageTags getImageTags(Integer id){
         return imageTagsRepository.findById(id).get();
     }
+
+    public List<ImageTags> getImageTagsByImageID(Integer imageID){
+        return imageTagsRepository.findByImageID(imageID);
+    }
 }

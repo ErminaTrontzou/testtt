@@ -13,7 +13,7 @@ public class Image {
     private String description;
     private String title;
     private String latitude;
-    private String longtitude;
+    private String longitude;
     private int views;
     private String owner_name;
     private String date_taken;
@@ -22,13 +22,13 @@ public class Image {
 
     }
 
-    public Image(int id,String file_name, String description, String title, String latitude, String longtitude, int views,String owner_name, String date_taken){
+    public Image(int id,String file_name, String description, String title, String latitude, String longitude, int views,String owner_name, String date_taken){
         this.id=id;
         this.file_name=file_name;
         this.description=description;
         this.title=title;
         this.latitude=latitude;
-        this.longtitude=longtitude;
+        this.longitude=longitude;
         this.views=views;
         this.owner_name=owner_name;
         this.date_taken=date_taken;
@@ -69,18 +69,18 @@ public class Image {
 
     @Column(name="latitude")
     public String getLatitude(){
-        return this.longtitude;
+        return this.latitude;
     }
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
     @Column(name="longtitude")
-    public String getLongtitude(){
-        return this.longtitude;
+    public String getLongitude(){
+        return this.longitude;
     }
-    public void setLongtitude(String longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     @Column(name="views")
@@ -106,13 +106,5 @@ public class Image {
     public void setDate_taken(String date_taken) {
         this.date_taken = date_taken;
     }
-
-    @ManyToMany
-    @JoinTable(
-            name = "ImageTags",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id")
-    )
-    Set<Tag> imageTags;
 
 }
