@@ -42,7 +42,7 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/test")
+    @GetMapping("/withtags")
     public String test (){
         JSONArray array = new JSONArray();
         List<Image> allImages = imageService.listAllImages();

@@ -75,7 +75,7 @@ public class Image {
         this.latitude = latitude;
     }
 
-    @Column(name="longtitude")
+    @Column(name="longitude")
     public String getLongitude(){
         return this.longitude;
     }
