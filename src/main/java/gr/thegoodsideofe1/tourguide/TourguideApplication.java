@@ -1,5 +1,6 @@
 package gr.thegoodsideofe1.tourguide;
 
+import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -31,5 +32,16 @@ public class TourguideApplication {
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AES_ENCRYPTION aes_encryption() {
+        AES_ENCRYPTION encryptionClass = new AES_ENCRYPTION();
+        try {
+            encryptionClass.init();
+        } catch (Exception e){
+
+        }
+        return encryptionClass;
     }
 }

@@ -1,13 +1,17 @@
 package gr.thegoodsideofe1.tourguide.controllers;
 
+import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import gr.thegoodsideofe1.tourguide.entities.User;
 import gr.thegoodsideofe1.tourguide.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -22,6 +26,8 @@ public class UserController {
     UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AES_ENCRYPTION aes_encryption;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<User> list(){
@@ -67,7 +73,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login/email", method = RequestMethod.POST)
-    public Map<String, String> login(@RequestBody Map<String, String> userLoginDetails) throws NoSuchAlgorithmException {
+    public Map<String, String> login(@RequestBody Map<String, String> userLoginDetails) throws Exception {
         Map<String, String> returnResponse = new HashMap<>();
         String emailParam = userLoginDetails.get("email");
         String passwordParam = userLoginDetails.get("password");
@@ -86,16 +92,16 @@ public class UserController {
         if (passwordEncoder.matches(passwordParam, userToLogin.getPassword())){
             //Password Param matches password in DB
             String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirst_name() + "," + userToLogin.getLast_name();
-            byte[] jwtToken = digest.digest(userDetailsJoined.getBytes(StandardCharsets.UTF_8));
+
             returnResponse.put("status", "success");
-            returnResponse.put("token", toHexString(jwtToken));
+            returnResponse.put("token", aes_encryption.encrypt(userDetailsJoined));
         }
         returnResponse.put("test", String.valueOf(passwordEncoder.matches(passwordParam, userToLogin.getPassword())));
         return returnResponse;
     }
 
     @RequestMapping(value = "/login/username", method = RequestMethod.POST)
-    public Map<String, String> loginUsername(@RequestBody Map<String, String> userLoginDetails) throws NoSuchAlgorithmException {
+    public Map<String, String> loginUsername(@RequestBody Map<String, String> userLoginDetails) throws Exception {
         Map<String, String> returnResponse = new HashMap<>();
         String usernameParam = userLoginDetails.get("username");
         String passwordParam = userLoginDetails.get("password");
@@ -114,21 +120,11 @@ public class UserController {
         if (passwordEncoder.matches(passwordParam, userToLogin.getPassword())){
             //Password Param matches password in DB
             String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirst_name() + "," + userToLogin.getLast_name();
-            byte[] jwtToken = digest.digest(userDetailsJoined.getBytes(StandardCharsets.UTF_8));
+
             returnResponse.put("status", "success");
-            returnResponse.put("token", toHexString(jwtToken));
+            returnResponse.put("token", aes_encryption.encrypt(userDetailsJoined));
         }
         returnResponse.put("test", String.valueOf(passwordEncoder.matches(passwordParam, userToLogin.getPassword())));
         return returnResponse;
     }
-
-    private static String toHexString(byte[] hash){
-        BigInteger number = new BigInteger(1, hash);
-        StringBuilder hexString = new StringBuilder(number.toString(16));
-        while (hexString.length() < 64){
-            hexString.insert(0, '0');
-        }
-        return hexString.toString();
-    }
-    //https://www.geeksforgeeks.org/sha-256-hash-in-java/
 }

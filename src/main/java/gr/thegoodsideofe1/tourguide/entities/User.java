@@ -1,6 +1,7 @@
 package gr.thegoodsideofe1.tourguide.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -14,6 +15,8 @@ public class User {
     private boolean is_admin;
     private boolean disabled;
     private static final int encryptFactorLength = 2048;
+    @OneToMany(mappedBy="id")
+    private Set<UserCollection> collections;
 
     public User(){}
 

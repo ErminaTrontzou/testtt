@@ -36,4 +36,8 @@ public class UserService {
     public User getUserByUsername(String username){
         return userRepository.getUserByUsername(username);
     }
+
+    public User getUserByParams(String username, String email, String firstName, String lastName){
+        return userRepository.getUserByParams(username, email, firstName, lastName);
+    }
 }
