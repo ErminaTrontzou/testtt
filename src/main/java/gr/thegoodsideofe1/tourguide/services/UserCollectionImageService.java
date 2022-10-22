@@ -29,4 +29,8 @@ public class UserCollectionImageService {
     public void deleteCollectionImage(Integer id){
         userCollectionImagesRepository.deleteById(id);
     }
+
+    public List<UserCollectionImage> getAllCollectionImagesByCollectionID (Integer collectionID){
+        return userCollectionImagesRepository.getAllByCollectionID(collectionID);
+    }
 }

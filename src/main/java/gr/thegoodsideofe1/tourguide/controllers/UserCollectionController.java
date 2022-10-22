@@ -3,6 +3,8 @@ package gr.thegoodsideofe1.tourguide.controllers;
 import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import gr.thegoodsideofe1.tourguide.entities.User;
 import gr.thegoodsideofe1.tourguide.entities.UserCollection;
+import gr.thegoodsideofe1.tourguide.entities.UserCollectionImage;
+import gr.thegoodsideofe1.tourguide.services.UserCollectionImageService;
 import gr.thegoodsideofe1.tourguide.services.UserCollectionService;
 import gr.thegoodsideofe1.tourguide.services.UserService;
 import org.json.JSONArray;
@@ -19,6 +21,8 @@ import java.util.Map;
 public class UserCollectionController {
     @Autowired
     UserCollectionService userCollectionService;
+    @Autowired
+    UserCollectionImageService userCollectionImageService;
     @Autowired
     private AES_ENCRYPTION aes_encryption;
     @Autowired
@@ -196,7 +200,47 @@ public class UserCollectionController {
         return arrayToReturn.toString();
     }
 
-    //TODO: Delete Action
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public String delete(@RequestBody Map<String, String> requestBody, @PathVariable String id) throws Exception {
+        JSONArray arrayToReturn = new JSONArray();
+
+        String requestJWTToken = requestBody.get("Bearer");
+        String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
+        User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
+
+        if (loginUser != null) {
+            //User is Logged In
+            UserCollection userCollection = userCollectionService.getCollection(Integer.parseInt(id));
+            if (userCollection.getUser_id() == loginUser.getId()){
+                //Logged in user is same as the collection owner
+                //Delete Child
+                List<UserCollectionImage> allCollectionImages = userCollectionImageService.getAllCollectionImagesByCollectionID(userCollection.getId());
+                for (UserCollectionImage collectionImage : allCollectionImages){
+                    userCollectionImageService.deleteCollectionImage(collectionImage.getId());
+                }
+                userCollectionService.deleteCollection(userCollection.getId());
+
+                JSONObject singleCollection = new JSONObject();
+                singleCollection.put("status", "success");
+                singleCollection.put("message", "User Collection Deleted Successfully !");
+                arrayToReturn.put(singleCollection);
+
+            } else {
+                //Logged in user is not same as the collection owner
+                JSONObject singleCollection = new JSONObject();
+                singleCollection.put("status", "error");
+                singleCollection.put("message", "Collection is owned by another user.");
+                arrayToReturn.put(singleCollection);
+            }
+        } else {
+            //User is NOT logged in
+            JSONObject singleCollection = new JSONObject();
+            singleCollection.put("status", "error");
+            singleCollection.put("message", "You must provide JWT first");
+            arrayToReturn.put(singleCollection);
+        }
+        return arrayToReturn.toString();
+    }
 
     private String[] getUserDetailsFromJWT(String token) throws Exception {
         String decryptedString = aes_encryption.decrypt(token);
