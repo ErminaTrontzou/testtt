@@ -1,25 +1,45 @@
 package gr.thegoodsideofe1.tourguide.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name="tags")
 public class Tag {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
+    @Column(name="name")
     private String name;
+
+
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Image> images = new HashSet<>();
+
+    public Set<Image> getImages(){
+        return images;
+    }
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
+
+
 
     public Tag(){
 
     }
+
 
     public Tag(int id, String name){
         this.id=id;
         this.name=name;
     }
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+
     public int getId(){
         return this.id;
     }
@@ -27,7 +47,7 @@ public class Tag {
         this.id = id;
     }
 
-    @Column(name="name")
+
     public String getName(){
         return this.name;
     }
@@ -35,6 +55,7 @@ public class Tag {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy = "imageTags")
-    Set<Image> images;
+
+
+
 }
