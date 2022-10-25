@@ -1,18 +1,37 @@
 package gr.thegoodsideofe1.tourguide.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "first_name")
     private String first_name;
+    @Column(name = "last_name")
     private String last_name;
+    @Column(name = "email")
     private String email;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "is_admin")
     private boolean is_admin;
+    @Column(name = "disabled")
     private boolean disabled;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", targetEntity = UserCollection.class ,fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<UserCollection> userCollections;
+
+    private static final int encryptFactorLength = 2048;
 
     public User(){}
 
@@ -27,8 +46,7 @@ public class User {
         this.disabled = disabled;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     public int getId(){
         return this.id;
     }
@@ -36,7 +54,6 @@ public class User {
         this.id = newID;
     }
 
-    @Column(name = "first_name")
     public String getFirst_name(){
         return this.first_name;
     }
@@ -44,7 +61,6 @@ public class User {
         this.first_name = newFirstName;
     }
 
-    @Column(name = "last_name")
     public String getLast_name(){
         return this.last_name;
     }
@@ -52,7 +68,6 @@ public class User {
         this.last_name = newLastName;
     }
 
-    @Column(name = "email")
     public String getEmail(){
         return this.email;
     }
@@ -60,7 +75,6 @@ public class User {
         this.email = newEmail;
     }
 
-    @Column(name = "username")
     public String getUsername(){
         return this.username;
     }
@@ -68,15 +82,13 @@ public class User {
         this.username = newUsername;
     }
 
-    @Column(name = "password")
-    private String getPassword(){
+    public String getPassword(){
         return this.password;
     }
     public void setPassword(String newPassword){
         this.password = newPassword;
     }
 
-    @Column(name = "is_admin")
     public boolean getIs_admin(){
         return this.is_admin;
     }
@@ -84,7 +96,6 @@ public class User {
         this.is_admin = newIsAdmin;
     }
 
-    @Column(name = "disabled")
     public boolean getDisabled(){
         return this.disabled;
     }
