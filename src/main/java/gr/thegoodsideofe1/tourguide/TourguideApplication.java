@@ -1,5 +1,4 @@
 package gr.thegoodsideofe1.tourguide;
-
 import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,13 +11,14 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+@SpringBootApplication
 @SpringBootApplication()
 @EnableWebMvc
 public class TourguideApplication {
     public static void main(String[] args) {
         SpringApplication.run(TourguideApplication.class, args);
     }
-
+  
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
