@@ -12,7 +12,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @SpringBootApplication
-@SpringBootApplication()
 @EnableWebMvc
 public class TourguideApplication {
     public static void main(String[] args) {

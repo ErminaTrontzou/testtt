@@ -139,7 +139,6 @@ public class UserCollectionController {
             if (loginUser != null) {
                 //User is Logged in
                 UserCollection newUserCollection = new UserCollection();
-                newUserCollection.setId(6);
                 newUserCollection.setName(requestBody.get("name"));
                 newUserCollection.setDescription(requestBody.get("description"));
                 newUserCollection.setUser_id(loginUser);
