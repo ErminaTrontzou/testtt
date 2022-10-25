@@ -17,6 +17,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'org.springframework.security:spring-security-crypto:5.7.3'
+    implementation 'org.json:json:20220924'
+    implementation group: 'org.apache.directory.studio', name: 'org.apache.commons.codec', version: '1.8'
 }
 
 tasks.named('test') {
