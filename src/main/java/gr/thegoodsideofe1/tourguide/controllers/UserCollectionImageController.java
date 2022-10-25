@@ -103,43 +103,43 @@ public class UserCollectionImageController {
         String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
         User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
 
-        if (loginUser != null) {
-            //User is Logged In
-            UserCollectionImage userCollectionImage = userCollectionImageService.getCollectionImage(Integer.parseInt(requestBody.get("user_collection_id")));
-            if (userCollectionImage != null) {
-                //User Collection Exists
-                UserCollection userCollection = userCollectionService.getCollection(userCollectionImage.getUser_collection_id());
-                if (userCollection.getUser_id() == loginUser.getId()){
-                    //Collection is owned by the logged in user
-                    userCollectionImage.setUser_collection_id(Integer.parseInt(requestBody.get("user_collection_id")));
-                    userCollectionImage.setImage_id(Integer.parseInt(requestBody.get("image_id")));
-                    userCollectionImageService.saveCollection(userCollectionImage);
-
-                    JSONObject singleCollection = new JSONObject();
-                    singleCollection.put("status", "success");
-                    singleCollection.put("message", "User Collection Image Update Successfully");
-                    arrayToReturn.put(singleCollection);
-                } else {
-                    //Collection is NOT owned by the logged in user
-                    JSONObject singleCollection = new JSONObject();
-                    singleCollection.put("status", "error");
-                    singleCollection.put("message", "User Collection does owned by another user !");
-                    arrayToReturn.put(singleCollection);
-                }
-            } else {
-                //User Collection Does NOT Exists
-                JSONObject singleCollection = new JSONObject();
-                singleCollection.put("status", "error");
-                singleCollection.put("message", "User Collection does NOT exists !");
-                arrayToReturn.put(singleCollection);
-            }
-        } else {
-            // User is NOT logged in
-            JSONObject singleCollection = new JSONObject();
-            singleCollection.put("status", "error");
-            singleCollection.put("message", "You must provide JWT first");
-            arrayToReturn.put(singleCollection);
-        }
+//        if (loginUser != null) {
+//            //User is Logged In
+//            UserCollectionImage userCollectionImage = userCollectionImageService.getCollectionImage(Integer.parseInt(requestBody.get("user_collection_id")));
+//            if (userCollectionImage != null) {
+//                //User Collection Exists
+//                UserCollection userCollection = userCollectionService.getCollection(userCollectionImage.getUser_collection_id());
+//                if (userCollection.getUser_id() == loginUser.getId()){
+//                    //Collection is owned by the logged in user
+//                    userCollectionImage.setUser_collection_id(Integer.parseInt(requestBody.get("user_collection_id")));
+//                    userCollectionImage.setImage_id(Integer.parseInt(requestBody.get("image_id")));
+//                    userCollectionImageService.saveCollection(userCollectionImage);
+//
+//                    JSONObject singleCollection = new JSONObject();
+//                    singleCollection.put("status", "success");
+//                    singleCollection.put("message", "User Collection Image Update Successfully");
+//                    arrayToReturn.put(singleCollection);
+//                } else {
+//                    //Collection is NOT owned by the logged in user
+//                    JSONObject singleCollection = new JSONObject();
+//                    singleCollection.put("status", "error");
+//                    singleCollection.put("message", "User Collection does owned by another user !");
+//                    arrayToReturn.put(singleCollection);
+//                }
+//            } else {
+//                //User Collection Does NOT Exists
+//                JSONObject singleCollection = new JSONObject();
+//                singleCollection.put("status", "error");
+//                singleCollection.put("message", "User Collection does NOT exists !");
+//                arrayToReturn.put(singleCollection);
+//            }
+//        } else {
+//            // User is NOT logged in
+//            JSONObject singleCollection = new JSONObject();
+//            singleCollection.put("status", "error");
+//            singleCollection.put("message", "You must provide JWT first");
+//            arrayToReturn.put(singleCollection);
+//        }
         return arrayToReturn.toString();
     }
 
@@ -151,44 +151,44 @@ public class UserCollectionImageController {
         String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
         User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
 
-        if (loginUser != null) {
-            //User is Logged In
-            UserCollection userCollection = userCollectionService.getCollection(Integer.parseInt(requestBody.get("user_collection_id")));
-            if (userCollection != null){
-                //Collection Exists
-                User userCollectionDetails = userService.getUser(userCollection.getUser_id());
-                if (userCollectionDetails.getId() == loginUser.getId()){
-                    //User Collection owned by logged-in user
-                    UserCollectionImage newCollectionImage = new UserCollectionImage();
-                    newCollectionImage.setImage_id(Integer.parseInt(requestBody.get("image_id")));
-                    newCollectionImage.setUser_collection_id(Integer.parseInt(requestBody.get("user_collection_id")));
-                    userCollectionImageService.saveCollection(newCollectionImage);
-
-                    JSONObject singleCollection = new JSONObject();
-                    singleCollection.put("status", "success");
-                    singleCollection.put("message", "Image Added to Collection");
-                    arrayToReturn.put(singleCollection);
-                } else {
-                    //User Collection owned by OTHER user
-                    JSONObject singleCollection = new JSONObject();
-                    singleCollection.put("status", "error");
-                    singleCollection.put("message", "Collection is owned by another user.");
-                    arrayToReturn.put(singleCollection);
-                }
-            } else {
-                //Collection Does NOT Exists
-                JSONObject singleCollection = new JSONObject();
-                singleCollection.put("status", "error");
-                singleCollection.put("message", "Collection does NOT exists.");
-                arrayToReturn.put(singleCollection);
-            }
-        } else {
-            //Collection Does NOT Exists
-            JSONObject singleCollection = new JSONObject();
-            singleCollection.put("status", "error");
-            singleCollection.put("message", "You must provide JWT first");
-            arrayToReturn.put(singleCollection);
-        }
+//        if (loginUser != null) {
+//            //User is Logged In
+//            UserCollection userCollection = userCollectionService.getCollection(Integer.parseInt(requestBody.get("user_collection_id")));
+//            if (userCollection != null){
+//                //Collection Exists
+//                User userCollectionDetails = userService.getUser(userCollection.getUser_id());
+//                if (userCollectionDetails.getId() == loginUser.getId()){
+//                    //User Collection owned by logged-in user
+//                    UserCollectionImage newCollectionImage = new UserCollectionImage();
+//                    newCollectionImage.setImage_id(Integer.parseInt(requestBody.get("image_id")));
+//                    newCollectionImage.setUser_collection_id(Integer.parseInt(requestBody.get("user_collection_id")));
+//                    userCollectionImageService.saveCollection(newCollectionImage);
+//
+//                    JSONObject singleCollection = new JSONObject();
+//                    singleCollection.put("status", "success");
+//                    singleCollection.put("message", "Image Added to Collection");
+//                    arrayToReturn.put(singleCollection);
+//                } else {
+//                    //User Collection owned by OTHER user
+//                    JSONObject singleCollection = new JSONObject();
+//                    singleCollection.put("status", "error");
+//                    singleCollection.put("message", "Collection is owned by another user.");
+//                    arrayToReturn.put(singleCollection);
+//                }
+//            } else {
+//                //Collection Does NOT Exists
+//                JSONObject singleCollection = new JSONObject();
+//                singleCollection.put("status", "error");
+//                singleCollection.put("message", "Collection does NOT exists.");
+//                arrayToReturn.put(singleCollection);
+//            }
+//        } else {
+//            //Collection Does NOT Exists
+//            JSONObject singleCollection = new JSONObject();
+//            singleCollection.put("status", "error");
+//            singleCollection.put("message", "You must provide JWT first");
+//            arrayToReturn.put(singleCollection);
+//        }
         return arrayToReturn.toString();
     }
 
@@ -200,41 +200,41 @@ public class UserCollectionImageController {
         String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
         User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
 
-        if (loginUser != null) {
-            //User is Logged In
-            UserCollectionImage userCollectionImage = userCollectionImageService.getCollectionImage(id);
-            UserCollection userCollection = userCollectionService.getCollection(userCollectionImage.getUser_collection_id());
-            if (userCollection != null) {
-                //Collection Exists
-                User userCollectionDetails = userService.getUser(userCollection.getUser_id());
-                if (userCollectionDetails.getId() == loginUser.getId()) {
-                    //Logged in user is same as collection owner
-                    userCollectionImageService.deleteCollectionImage(id);
-                    JSONObject singleCollection = new JSONObject();
-                    singleCollection.put("status", "success");
-                    singleCollection.put("message", "Collection Image deleted successfully.");
-                    arrayToReturn.put(singleCollection);
-                } else {
-                    //Logged in user is NOT same as collection owner
-                    JSONObject singleCollection = new JSONObject();
-                    singleCollection.put("status", "error");
-                    singleCollection.put("message", "Collection is owned by another user.");
-                    arrayToReturn.put(singleCollection);
-                }
-            } else {
-                //Collection Does NOT exists
-                JSONObject singleCollection = new JSONObject();
-                singleCollection.put("status", "error");
-                singleCollection.put("message", "You User Collection does NOT exists !");
-                arrayToReturn.put(singleCollection);
-            }
-        } else {
-            //User is NOT logged in
-            JSONObject singleCollection = new JSONObject();
-            singleCollection.put("status", "error");
-            singleCollection.put("message", "You must provide JWT first");
-            arrayToReturn.put(singleCollection);
-        }
+//        if (loginUser != null) {
+//            //User is Logged In
+//            UserCollectionImage userCollectionImage = userCollectionImageService.getCollectionImage(id);
+//            UserCollection userCollection = userCollectionService.getCollection(userCollectionImage.getUser_collection_id());
+//            if (userCollection != null) {
+//                //Collection Exists
+//                User userCollectionDetails = userService.getUser(userCollection.getUser_id());
+//                if (userCollectionDetails.getId() == loginUser.getId()) {
+//                    //Logged in user is same as collection owner
+//                    userCollectionImageService.deleteCollectionImage(id);
+//                    JSONObject singleCollection = new JSONObject();
+//                    singleCollection.put("status", "success");
+//                    singleCollection.put("message", "Collection Image deleted successfully.");
+//                    arrayToReturn.put(singleCollection);
+//                } else {
+//                    //Logged in user is NOT same as collection owner
+//                    JSONObject singleCollection = new JSONObject();
+//                    singleCollection.put("status", "error");
+//                    singleCollection.put("message", "Collection is owned by another user.");
+//                    arrayToReturn.put(singleCollection);
+//                }
+//            } else {
+//                //Collection Does NOT exists
+//                JSONObject singleCollection = new JSONObject();
+//                singleCollection.put("status", "error");
+//                singleCollection.put("message", "You User Collection does NOT exists !");
+//                arrayToReturn.put(singleCollection);
+//            }
+//        } else {
+//            //User is NOT logged in
+//            JSONObject singleCollection = new JSONObject();
+//            singleCollection.put("status", "error");
+//            singleCollection.put("message", "You must provide JWT first");
+//            arrayToReturn.put(singleCollection);
+//        }
         return arrayToReturn.toString();
     }
 

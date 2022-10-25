@@ -4,26 +4,32 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user_collections")
-public class UserCollection {
+public class UserCollection implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "is_public")
     private boolean is_public;
-    private int user_id;
 
-    public UserCollection(int id, String name, String description, boolean isPublic, int userID){
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+
+    public UserCollection(int id, String name, String description, boolean isPublic, User userID){
         this.id = id;
         this.name = name;
         this.description = description;
         this.is_public = isPublic;
-        this.user_id = userID;
+        this.user = userID;
     }
 
     public UserCollection() {
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId(){
         return this.id;
     }
@@ -31,7 +37,6 @@ public class UserCollection {
         this.id = newID;
     }
 
-    @Column(name = "name")
     public String getName(){
         return this.name;
     }
@@ -39,7 +44,6 @@ public class UserCollection {
         this.name = newName;
     }
 
-    @Column(name = "description")
     public String getDescription(){
         return this.description;
     }
@@ -47,7 +51,6 @@ public class UserCollection {
         this.description = newDescription;
     }
 
-    @Column(name = "public")
     public boolean getIs_public(){
         return this.is_public;
     }
@@ -55,11 +58,10 @@ public class UserCollection {
         this.is_public = newIsPublic;
     }
 
-    @Column(name = "user_id")
-    public int getUser_id() {
-        return this.user_id;
+    public User getUser_id() {
+        return this.user;
     }
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser_id(User user_id) {
+        this.user = user_id;
     }
 }

@@ -5,8 +5,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_collections_images")
 public class UserCollectionImage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "image_id")
     private int image_id;
+    @Column(name = "user_collection_id")
     private int user_collection_id;
 
     public void UserCollection(int id, int image_id, int user_collection_id){
@@ -19,8 +23,6 @@ public class UserCollectionImage {
 
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId(){
         return this.id;
     }
@@ -28,7 +30,6 @@ public class UserCollectionImage {
         this.id = newID;
     }
 
-    @Column(name = "image_id")
     public int getImage_id(){
         return this.image_id;
     }
@@ -36,7 +37,6 @@ public class UserCollectionImage {
         this.image_id = imageId;
     }
 
-    @Column(name = "user_collection_id")
     public int getUser_collection_id(){
         return this.user_collection_id;
     }
