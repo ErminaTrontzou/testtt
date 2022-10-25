@@ -1,6 +1,7 @@
 package gr.thegoodsideofe1.tourguide.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "user_collections")
