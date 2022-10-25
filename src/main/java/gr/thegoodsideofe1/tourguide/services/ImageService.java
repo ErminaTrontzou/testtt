@@ -22,4 +22,8 @@ public class ImageService {
         return imageRepository.findById(id).get();
     }
 
+
+    public List<Image> getImageByTitle(String title){
+        return imageRepository.findAllImagesByTitle(title);
+    }
 }

@@ -36,5 +36,11 @@ public class ImageController {
         }
     }
 
+
+    @GetMapping("/getByTitle/{title}")
+    public List<Image> imageByTitle(@PathVariable String title){
+        return imageService.getImageByTitle(title);
+    }
+
 }
 
