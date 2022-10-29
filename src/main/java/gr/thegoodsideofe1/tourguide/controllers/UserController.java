@@ -18,9 +18,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("api/v1/users")
-@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     UserService userService;
