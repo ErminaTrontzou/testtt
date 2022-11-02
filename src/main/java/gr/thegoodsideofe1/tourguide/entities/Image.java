@@ -1,8 +1,6 @@
 package gr.thegoodsideofe1.tourguide.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -14,7 +12,7 @@ public class Image implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name="file_name")
-    private String file_name;
+    private String fileName;
     @Column(name="description")
     private String description;
     @Column(name="title")
@@ -26,9 +24,9 @@ public class Image implements Serializable {
     @Column(name="views")
     private int views;
     @Column(name="owner_name")
-    private String owner_name;
+    private String ownerName;
     @Column(name="date_taken")
-    private String date_taken;
+    private String dateTaken;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -54,16 +52,16 @@ public class Image implements Serializable {
 
     }
 
-    public Image(int id,String file_name, String description, String title, String latitude, String longitude, int views,String owner_name, String date_taken){
+    public Image(int id,String fileName, String description, String title, String latitude, String longitude, int views,String ownerName, String dateTaken){
         this.id=id;
-        this.file_name=file_name;
+        this.fileName =fileName;
         this.description=description;
         this.title=title;
         this.latitude=latitude;
         this.longitude=longitude;
         this.views=views;
-        this.owner_name=owner_name;
-        this.date_taken=date_taken;
+        this.ownerName =ownerName;
+        this.dateTaken =dateTaken;
     }
 
 
@@ -75,11 +73,11 @@ public class Image implements Serializable {
     }
 
 
-    public String getFile_name(){
-        return this.file_name;
+    public String getFileName(){
+        return this.fileName;
     }
-    public void setFile_name(String file_name) {
-        this.file_name = file_name;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
 
@@ -123,19 +121,19 @@ public class Image implements Serializable {
     }
 
 
-    public String getOwner_name(){
-        return this.owner_name;
+    public String getOwnerName(){
+        return this.ownerName;
     }
-    public void setOwner_name(String owner_name) {
-        this.owner_name = owner_name;
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
 
-    public String getDate_taken(){
-        return this.date_taken;
+    public String getDateTaken(){
+        return this.dateTaken;
     }
-    public void setDate_taken(String date_taken) {
-        this.date_taken = date_taken;
+    public void setDateTaken(String dateTaken) {
+        this.dateTaken = dateTaken;
     }
 
 

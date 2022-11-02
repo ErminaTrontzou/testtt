@@ -10,6 +10,6 @@ import java.util.List;
 public interface UserCollectionImageRepository extends JpaRepository<UserCollectionImage, Integer> {
     List<UserCollectionImage> findAll();
 
-    @Query(value = "SELECT u FROM UserCollectionImage u WHERE u.user_collection_id=:userCollectionID")
+    @Query(value = "SELECT u FROM UserCollectionImage u WHERE u.userCollectionId=:userCollectionID")
     List<UserCollectionImage> getAllByCollectionID(@Param("userCollectionID") Integer userCollectionID);
 }

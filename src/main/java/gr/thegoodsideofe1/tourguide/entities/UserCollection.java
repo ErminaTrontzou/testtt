@@ -14,7 +14,7 @@ public class UserCollection implements Serializable {
     @Column(name = "description")
     private String description;
     @Column(name = "is_public")
-    private boolean is_public;
+    private boolean isPublic;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -24,7 +24,7 @@ public class UserCollection implements Serializable {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.is_public = isPublic;
+        this.isPublic = isPublic;
         this.user = userID;
     }
 
@@ -52,11 +52,11 @@ public class UserCollection implements Serializable {
         this.description = newDescription;
     }
 
-    public boolean getIs_public(){
-        return this.is_public;
+    public boolean getIsPublic(){
+        return this.isPublic;
     }
-    public void setIs_public(boolean newIsPublic){
-        this.is_public = newIsPublic;
+    public void setIsPublic(boolean newIsPublic){
+        this.isPublic = newIsPublic;
     }
 
     public User getUser_id() {
