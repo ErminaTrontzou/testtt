@@ -16,7 +16,7 @@ public class UserCollection implements Serializable {
     @Column(name = "is_public")
     private boolean isPublic;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 

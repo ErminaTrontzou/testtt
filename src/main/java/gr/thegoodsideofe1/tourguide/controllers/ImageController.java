@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 //@CrossOrigin(origins = "http://localhost:3000")
@@ -21,12 +22,13 @@ public class ImageController {
     @Autowired
     ImageRepository imageRepository;
 
-
+    @Transactional
     @GetMapping("")
     public List<Image> list(){
         return imageService.listAllImages();
     }
 
+    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity<Image> get (@PathVariable Integer id){
         try{
@@ -37,7 +39,7 @@ public class ImageController {
         }
     }
 
-
+    @Transactional
     @GetMapping("/getByTitle/{title}")
     public List<Image> imageByTitle(@PathVariable String title){
         return imageService.getImageByTitle(title);

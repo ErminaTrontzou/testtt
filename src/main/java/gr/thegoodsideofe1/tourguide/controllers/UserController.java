@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.security.MessageDigest;
 import java.util.*;
 
@@ -23,11 +24,13 @@ public class UserController {
     @Autowired
     private AES_ENCRYPTION aes_encryption;
 
+    @Transactional
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<User> list(){
         return userService.listAllUsers();
     }
 
+    @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> get (@PathVariable Integer id){
         try {

@@ -29,7 +29,7 @@ public class Image implements Serializable {
     private String dateTaken;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "image_tags",
             joinColumns = {
                     @JoinColumn(name = "image_id", referencedColumnName = "id",
