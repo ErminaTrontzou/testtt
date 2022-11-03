@@ -21,6 +21,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto:5.7.3'
     implementation 'org.json:json:20220924'
     implementation group: 'org.apache.directory.studio', name: 'org.apache.commons.codec', version: '1.8'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.7.5'
 }
 
 tasks.named('test') {
