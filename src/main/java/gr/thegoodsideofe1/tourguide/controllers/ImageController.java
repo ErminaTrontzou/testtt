@@ -1,5 +1,6 @@
 package gr.thegoodsideofe1.tourguide.controllers;
 
+import com.google.gson.Gson;
 import gr.thegoodsideofe1.tourguide.entities.Image;
 import gr.thegoodsideofe1.tourguide.repositories.ImageRepository;
 import gr.thegoodsideofe1.tourguide.services.ImageService;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.*;
 
 @RestController
