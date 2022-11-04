@@ -1,20 +1,17 @@
 package gr.thegoodsideofe1.tourguide.controllers;
 
-import com.google.gson.Gson;
 import gr.thegoodsideofe1.tourguide.entities.Image;
+import gr.thegoodsideofe1.tourguide.entities.Tag;
 import gr.thegoodsideofe1.tourguide.repositories.ImageRepository;
 import gr.thegoodsideofe1.tourguide.services.ImageService;
+import gr.thegoodsideofe1.tourguide.services.TagService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.MediaType;
 
 
-import okio.ByteString;
-import org.apache.tomcat.util.json.JSONParser;
-import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +30,9 @@ public class ImageController {
 
     @Autowired
     ImageRepository imageRepository;
+
+    @Autowired
+    TagService tagService;
 
 
     @GetMapping("")
@@ -110,7 +110,11 @@ public class ImageController {
             imageToSave.setDate_taken(singlePhotoObj.getString("datetaken"));
             imageToSave.setViews(Integer.parseInt(singlePhotoObj.getString("views")));
             imageToSave.setOwner_name(singlePhotoObj.getString("ownername"));
-            //TODO: Save Tags
+
+            Set<Tag> allTagsToSave = serializeTags(singlePhotoObj.getString("tags"));
+            imageToSave.setTags(allTagsToSave);
+
+            System.out.println(imageToSave.getTitle());
             imageRepository.save(imageToSave);
         }
     }
@@ -124,6 +128,29 @@ public class ImageController {
         //Convert to JSON
         JSONObject jsonObj = new JSONObject(bodyResponseBuffer.toString());
         return jsonObj;
+    }
+
+    private Set<Tag> serializeTags(String allTags){
+        Set<Tag> imageTagsSet = new HashSet<Tag>();
+        if (allTags.isEmpty()){
+            return imageTagsSet;
+        }
+        String[] splitTags = allTags.split(" ");
+        for (String tag: splitTags){
+            long tagCount = tagService.getByTagName(tag);
+            if (tagCount != 0){
+                //Tag Exists
+                Tag singleTagDB = tagService.getTagByTagName(tag);
+                imageTagsSet.add(singleTagDB);
+                continue;
+            }
+            //Create Tag
+            Tag tagToSave = new Tag();
+            tagToSave.setName(tag);
+            tagService.save(tagToSave);
+            imageTagsSet.add(tagToSave);
+        }
+        return imageTagsSet;
     }
 
 }
