@@ -1,0 +1,35 @@
+version: "3.3"
+
+services:
+  tourguide-db:
+    image: tourguide-db
+    volumes:
+      - tourguide-db-vol:/var/lib/mysql
+
+  tourguide-phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 80:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=tourguide-db:443
+    depends_on:
+      - tourguide-db
+  
+  tourguide-back:
+    image: tourguide-back
+    ports:
+      - 8080:8080
+    #   - 80:8080
+    depends_on:
+      - tourguide-db
+
+  # tourguide-front:
+  #   image: tourguide-front
+  #   ports:
+  #     - 80:8000
+  #   depends_on:
+  #     - tourguide-back
+
+volumes:
+  tourguide-db-vol:
