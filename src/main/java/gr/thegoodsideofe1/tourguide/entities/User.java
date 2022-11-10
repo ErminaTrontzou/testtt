@@ -13,9 +13,9 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "first_name")
-    private String first_name;
+    private String firstName;
     @Column(name = "last_name")
-    private String last_name;
+    private String lastName;
     @Column(name = "email")
     private String email;
     @Column(name = "username")
@@ -23,7 +23,7 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
     @Column(name = "is_admin")
-    private boolean is_admin;
+    private boolean isAdmin;
     @Column(name = "disabled")
     private boolean disabled;
 
@@ -35,14 +35,14 @@ public class User implements Serializable {
 
     public User(){}
 
-    public User(int id, String first_name, String last_name, String email, String username, String password, boolean is_admin, boolean disabled){
+    public User(int id, String firstName, String lastName, String email, String username, String password, boolean isAdmin, boolean disabled){
         this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.is_admin = is_admin;
+        this.isAdmin = isAdmin;
         this.disabled = disabled;
     }
 
@@ -54,18 +54,18 @@ public class User implements Serializable {
         this.id = newID;
     }
 
-    public String getFirst_name(){
-        return this.first_name;
+    public String getFirstName(){
+        return this.firstName;
     }
-    public void setFirst_name(String newFirstName){
-        this.first_name = newFirstName;
+    public void setFirstName(String newFirstName){
+        this.firstName = newFirstName;
     }
 
-    public String getLast_name(){
-        return this.last_name;
+    public String getLastName(){
+        return this.lastName;
     }
-    public void setLast_name(String newLastName){
-        this.last_name = newLastName;
+    public void setLastName(String newLastName){
+        this.lastName = newLastName;
     }
 
     public String getEmail(){
@@ -89,11 +89,11 @@ public class User implements Serializable {
         this.password = newPassword;
     }
 
-    public boolean getIs_admin(){
-        return this.is_admin;
+    public boolean getIsAdmin(){
+        return this.isAdmin;
     }
-    public void setIs_admin(boolean newIsAdmin){
-        this.is_admin = newIsAdmin;
+    public void setIsAdmin(boolean newIsAdmin){
+        this.isAdmin = newIsAdmin;
     }
 
     public boolean getDisabled(){

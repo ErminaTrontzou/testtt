@@ -9,14 +9,14 @@ public class UserCollectionImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "image_id")
-    private int image_id;
+    private int imageId;
     @Column(name = "user_collection_id")
-    private int user_collection_id;
+    private int userCollectionId;
 
-    public void UserCollection(int id, int image_id, int user_collection_id){
+    public void UserCollection(int id, int imageId, int userCollectionId){
         this.id = id;
-        this.image_id = image_id;
-        this.user_collection_id = user_collection_id;
+        this.imageId = imageId;
+        this.userCollectionId = userCollectionId;
     }
 
     public UserCollectionImage() {
@@ -30,17 +30,17 @@ public class UserCollectionImage {
         this.id = newID;
     }
 
-    public int getImage_id(){
-        return this.image_id;
+    public int getImageId(){
+        return this.imageId;
     }
-    public void setImage_id(int imageId){
-        this.image_id = imageId;
+    public void setImageId(int imageId){
+        this.imageId = imageId;
     }
 
-    public int getUser_collection_id(){
-        return this.user_collection_id;
+    public int getUserCollectionId(){
+        return this.userCollectionId;
     }
-    public void setUser_collection_id(int userCollectionID){
-        this.user_collection_id = userCollectionID;
+    public void setUserCollectionId(int userCollectionID){
+        this.userCollectionId = userCollectionID;
     }
 }

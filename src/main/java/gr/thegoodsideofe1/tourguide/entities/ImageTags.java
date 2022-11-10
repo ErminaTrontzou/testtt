@@ -6,17 +6,17 @@ import javax.persistence.*;
 @Table(name="image_tags")
 public class ImageTags {
     private int id;
-    private int tag_id;
-    private int image_id;
+    private int tagId;
+    private int imageId;
 
     public ImageTags(){
 
     }
 
-    public ImageTags(int id,int tag_id,int image_id){
+    public ImageTags(int id, int tagId, int imageId){
         this.id=id;
-        this.tag_id=tag_id;
-        this.image_id=image_id;
+        this.tagId = tagId;
+        this.imageId = imageId;
     }
 
     @Id
@@ -31,19 +31,19 @@ public class ImageTags {
 
 
     @Column(name="tag_id")
-    public int getTag_id(){
-        return this.tag_id;
+    public int getTagId(){
+        return this.tagId;
     }
-    public void setTag_id(int tag_id) {
-        this.tag_id = tag_id;
+    public void setTagId(int tag_id) {
+        this.tagId = tag_id;
     }
 
     @Column(name="image_id")
-    public int getImage_id(){
-        return this.image_id;
+    public int getImageId(){
+        return this.imageId;
     }
-    public void setImage_id(int image_id) {
-        this.image_id = image_id;
+    public void setImageId(int image_id) {
+        this.imageId = image_id;
     }
 
 

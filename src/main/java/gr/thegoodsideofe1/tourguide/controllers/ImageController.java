@@ -19,8 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import javax.transaction.Transactional;
 import java.util.*;
 
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("api/v1/images")
 @ResponseBody
@@ -35,11 +37,13 @@ public class ImageController {
     TagService tagService;
 
 
+    @Transactional
     @GetMapping("")
     public List<Image> list(){
         return imageService.listAllImages();
     }
 
+    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity<Image> get (@PathVariable Integer id){
         try{
@@ -50,7 +54,7 @@ public class ImageController {
         }
     }
 
-
+    @Transactional
     @GetMapping("/getByTitle/{title}")
     public List<Image> imageByTitle(@PathVariable String title){
         List<Image> imageResponse = imageService.getImageByTitle(title);

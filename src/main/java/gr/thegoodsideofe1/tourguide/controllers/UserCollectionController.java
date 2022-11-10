@@ -1,6 +1,5 @@
 package gr.thegoodsideofe1.tourguide.controllers;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import gr.thegoodsideofe1.tourguide.entities.User;
 import gr.thegoodsideofe1.tourguide.entities.UserCollection;
@@ -8,8 +7,6 @@ import gr.thegoodsideofe1.tourguide.entities.UserCollectionImage;
 import gr.thegoodsideofe1.tourguide.services.UserCollectionImageService;
 import gr.thegoodsideofe1.tourguide.services.UserCollectionService;
 import gr.thegoodsideofe1.tourguide.services.UserService;
-import org.json.HTTP;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +40,7 @@ public class UserCollectionController {
 
             if (loginUser != null) {
                 //User is Logged in
-                if (loginUser.getIs_admin()) {
+                if (loginUser.getIsAdmin()) {
                     //User is Admin
                     List<UserCollection> allUserCollection = userCollectionService.listAllCollections();
                     List<JSONObject> allUserCollectionEntities = new ArrayList<JSONObject>();
@@ -53,7 +49,7 @@ public class UserCollectionController {
                         collection.put("id", userCollection.getId());
                         collection.put("name", userCollection.getName());
                         collection.put("description", userCollection.getDescription());
-                        collection.put("public", userCollection.getIs_public());
+                        collection.put("public", userCollection.getIsPublic());
                         collection.put("user_id", userCollection.getUser_id());
                     }
                     return Responder.generateResponse("success", HttpStatus.OK, allUserCollection.toArray());
@@ -79,7 +75,7 @@ public class UserCollectionController {
             if (loginUser != null) {
                 //User is Logged in
                 UserCollection userCollection = userCollectionService.getCollection(id);
-                if (loginUser.getIs_admin() || userCollection.getUser_id().getId() == loginUser.getId()) {
+                if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
                     //User is Admin or is Owner of the User Collection
                     return Responder.generateResponse("success", HttpStatus.OK, userCollection);
                 } else {
@@ -104,7 +100,7 @@ public class UserCollectionController {
             if (loginUser != null) {
                 //User is Logged in
                 UserCollection userCollection = userCollectionService.getCollection(id);
-                if (loginUser.getIs_admin() || userCollection.getUser_id().getId() == loginUser.getId()) {
+                if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
                     //User is Admin or is Owner of the User Collection
                      if (!requestBody.get("name").isBlank()){
                         userCollection.setName(requestBody.get("name"));
@@ -113,7 +109,7 @@ public class UserCollectionController {
                         userCollection.setName(requestBody.get("description"));
                     }
                     if (!requestBody.get("public").isEmpty()){
-                        userCollection.setIs_public(Boolean.getBoolean(requestBody.get("public")));
+                        userCollection.setIsPublic(Boolean.getBoolean(requestBody.get("public")));
                     }
                     userCollectionService.saveCollection(userCollection);
                     return Responder.generateResponse("success", HttpStatus.OK, userCollection);
@@ -142,7 +138,7 @@ public class UserCollectionController {
                 newUserCollection.setName(requestBody.get("name"));
                 newUserCollection.setDescription(requestBody.get("description"));
                 newUserCollection.setUser_id(loginUser);
-                newUserCollection.setIs_public(Boolean.getBoolean(requestBody.get("public")));
+                newUserCollection.setIsPublic(Boolean.getBoolean(requestBody.get("public")));
                 userCollectionService.saveCollection(newUserCollection);
                 return Responder.generateResponse("success", HttpStatus.OK, newUserCollection);
             } else {
@@ -163,7 +159,7 @@ public class UserCollectionController {
             if (loginUser != null) {
                 //User is Logged in
                 UserCollection userCollection = userCollectionService.getCollection(Integer.valueOf(id));
-                if (loginUser.getIs_admin() || userCollection.getUser_id().getId() == loginUser.getId()) {
+                if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
                     //User is Admin or is Owner of the User Collection
                     //Delete Child
                     List<UserCollectionImage> allCollectionImages = userCollectionImageService.getAllCollectionImagesByCollectionID(userCollection.getId());
