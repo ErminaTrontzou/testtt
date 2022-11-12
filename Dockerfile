@@ -1,10 +1,20 @@
-FROM gradle:jdk17
+FROM gradle:jdk17 as build
 
-WORKDIR /app
+WORKDIR /tourguide-back
 
-COPY ./ ./
+COPY build.gradle ./
+COPY settings.gradle ./
+COPY src/ src/
 
-# RUN gradle build
+RUN gradle bootJar
 
-CMD ["gradle", "--no-daemon", "bootRun"]
+
+
+FROM openjdk:17-slim
+
+WORKDIR /tourguide-back
+
+COPY --from=build /tourguide-back/build/libs/tourguide-*.jar ./
+
+CMD ["sh", "-c", "java -jar tourguide-*.jar"]
 

@@ -1,23 +1,25 @@
-version: "3.3"
-
 services:
   tourguide-db:
     image: tourguide-db
+    build: db-docker
     volumes:
       - tourguide-db-vol:/var/lib/mysql
 
   tourguide-phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin:latest
     ports:
       - 80:80
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=tourguide-db:443
+      - PMA_HOST=tourguide-db
+      - PMA_PORT=3306
+      - PMA_USER=ermina
+      - PMA_PASSWORD=hypers
     depends_on:
       - tourguide-db
   
   tourguide-back:
     image: tourguide-back
+    build: ./
     ports:
       - 8080:8080
     #   - 80:8080
