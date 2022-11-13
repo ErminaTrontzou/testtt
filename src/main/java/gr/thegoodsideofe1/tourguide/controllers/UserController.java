@@ -4,18 +4,13 @@ import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import gr.thegoodsideofe1.tourguide.entities.User;
 import gr.thegoodsideofe1.tourguide.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
+import javax.transaction.Transactional;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 //@CrossOrigin(origins = "http://localhost:3000")
@@ -29,11 +24,13 @@ public class UserController {
     @Autowired
     private AES_ENCRYPTION aes_encryption;
 
+    @Transactional
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<User> list(){
         return userService.listAllUsers();
     }
 
+    @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> get (@PathVariable Integer id){
         try {
@@ -91,7 +88,7 @@ public class UserController {
         //User Exists
         if (passwordEncoder.matches(passwordParam, userToLogin.getPassword())){
             //Password Param matches password in DB
-            String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirst_name() + "," + userToLogin.getLast_name();
+            String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirstName() + "," + userToLogin.getLastName();
 
             returnResponse.put("status", "success");
             returnResponse.put("token", aes_encryption.encrypt(userDetailsJoined));
@@ -119,7 +116,7 @@ public class UserController {
 
         if (passwordEncoder.matches(passwordParam, userToLogin.getPassword())){
             //Password Param matches password in DB
-            String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirst_name() + "," + userToLogin.getLast_name();
+            String userDetailsJoined = userToLogin.getEmail() + "," + userToLogin.getUsername() + "," + userToLogin.getFirstName() + "," + userToLogin.getLastName();
 
             returnResponse.put("status", "success");
             returnResponse.put("token", aes_encryption.encrypt(userDetailsJoined));
