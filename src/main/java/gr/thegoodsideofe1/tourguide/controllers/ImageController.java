@@ -110,10 +110,10 @@ public class ImageController {
             imageToSave.setDescription(singlePhotoDescription.getString("_content"));
             imageToSave.setLatitude(singlePhotoObj.getString("latitude"));
             imageToSave.setLongitude(singlePhotoObj.getString("longitude"));
-            imageToSave.setFile_name(singlePhotoObj.getString("url_o"));
-            imageToSave.setDate_taken(singlePhotoObj.getString("datetaken"));
+            imageToSave.setFileName(singlePhotoObj.getString("url_o"));
+            imageToSave.setDateTaken(singlePhotoObj.getString("datetaken"));
             imageToSave.setViews(Integer.parseInt(singlePhotoObj.getString("views")));
-            imageToSave.setOwner_name(singlePhotoObj.getString("ownername"));
+            imageToSave.setOwnerName(singlePhotoObj.getString("ownername"));
 
             Set<Tag> allTagsToSave = serializeTags(singlePhotoObj.getString("tags"));
             imageToSave.setTags(allTagsToSave);
