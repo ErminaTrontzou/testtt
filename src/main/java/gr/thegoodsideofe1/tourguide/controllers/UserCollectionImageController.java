@@ -2,7 +2,6 @@ package gr.thegoodsideofe1.tourguide.controllers;
 
 import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import gr.thegoodsideofe1.tourguide.entities.User;
-import gr.thegoodsideofe1.tourguide.entities.UserCollection;
 import gr.thegoodsideofe1.tourguide.entities.UserCollectionImage;
 import gr.thegoodsideofe1.tourguide.services.UserCollectionImageService;
 import gr.thegoodsideofe1.tourguide.services.UserCollectionService;
@@ -38,13 +37,13 @@ public class UserCollectionImageController {
         User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
 
         if (loginUser != null) {
-            if (loginUser.getIs_admin()) {
+            if (loginUser.getIsAdmin()) {
                 List<UserCollectionImage> allCollectionImages = userCollectionImageService.listAllCollectionsImages();
                 for (UserCollectionImage collectionImage : allCollectionImages){
                     JSONObject singleCollection = new JSONObject();
                     singleCollection.put("id", collectionImage.getId());
-                    singleCollection.put("image_id", collectionImage.getImage_id());
-                    singleCollection.put("user_collection_id", collectionImage.getUser_collection_id());
+                    singleCollection.put("image_id", collectionImage.getImageId());
+                    singleCollection.put("user_collection_id", collectionImage.getUserCollectionId());
                     arrayToReturn.put(singleCollection);
                 }
             } else {
@@ -73,11 +72,11 @@ public class UserCollectionImageController {
         UserCollectionImage userCollection = userCollectionImageService.getCollectionImage(id);
 
         if (loginUser != null) {
-            if (loginUser.getIs_admin()) {
+            if (loginUser.getIsAdmin()) {
                 JSONObject singleCollection = new JSONObject();
                 singleCollection.put("id", userCollection.getId());
-                singleCollection.put("image_id", userCollection.getImage_id());
-                singleCollection.put("user_collection_id", userCollection.getUser_collection_id());
+                singleCollection.put("image_id", userCollection.getImageId());
+                singleCollection.put("user_collection_id", userCollection.getUserCollectionId());
                 arrayToReturn.put(singleCollection);
             } else {
                 //User is NOT Admin

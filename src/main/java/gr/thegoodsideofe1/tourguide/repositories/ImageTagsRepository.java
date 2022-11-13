@@ -10,6 +10,6 @@ import java.util.List;
 public interface ImageTagsRepository extends JpaRepository<ImageTags, Integer> {
     public List<ImageTags> findAll();
 
-    @Query(value = "SELECT it FROM ImageTags it WHERE it.image_id=:imageID")
+    @Query(value = "SELECT it FROM ImageTags it WHERE it.imageId=:imageID")
     public List<ImageTags> findByImageID(@Param("imageID") Integer imageID);
 }
