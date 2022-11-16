@@ -3,7 +3,7 @@ name: Build Gradle project
 on:
   push:
     tags:
-      - "V*"
+      - "v*"
 
 jobs:
   build-gradle-project:
