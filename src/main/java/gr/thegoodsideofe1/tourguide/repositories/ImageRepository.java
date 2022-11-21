@@ -14,4 +14,7 @@ public interface ImageRepository extends CrudRepository<Image, Integer> {
     @Query(value = "SELECT i FROM Image i WHERE i.title LIKE %:title% OR i.description LIKE %:title%")
     List<Image> findAllImagesByTitle(@Param("title") String title);
 
+    @Query(value = "SELECT COUNT(i) FROM Image i WHERE i.title LIKE %:title% OR i.description LIKE %:title%")
+    int countImagesByTitle(@Param("title") String title);
+
 }

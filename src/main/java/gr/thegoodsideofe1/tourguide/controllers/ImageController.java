@@ -56,14 +56,13 @@ public class ImageController {
 
     @Transactional
     @GetMapping("/getByTitle/{title}")
-    public List<Image> imageByTitle(@PathVariable String title){
-        List<Image> imageResponse = imageService.getImageByTitle(title);
-        if(imageResponse.isEmpty()) {
-            if(getFlickr(title)){
-                imageResponse = imageService.getImageByTitle(title);
-            }
+    public ResponseEntity<?> imageByTitle(@PathVariable String title){
+        int imagesCount = imageService.getImageCount(title);
+        if (imagesCount != 0){
+            List<Image> imageResponse = imageService.getImageByTitle(title);
+            return new ResponseEntity<List<Image>>(imageResponse, HttpStatus.OK);
         }
-        return imageResponse;
+        return new ResponseEntity<Image>(HttpStatus.NO_CONTENT);
     }
 
     private boolean getFlickr(String title) {
