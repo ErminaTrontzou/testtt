@@ -1,0 +1,28 @@
+name: Build Gradle project
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-gradle-project:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout project sources
+      uses: actions/checkout@v2
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    - name: Run build with Gradle Wrapper
+      run: ./gradlew build
+    - name: Build with Gradle
+      run: |
+         ./gradlew bootJar
+    - name: Ls the dir
+      run: ls
+    - name: Ls the dir
+      run: tree build /F
+    - name: Upload Plugin jar
+      uses: actions/upload-artifact@v3
+      with:
+        path: build/libs/tourguide-0.0.1-SNAPSHOT.jar
