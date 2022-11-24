@@ -25,13 +25,13 @@ services:
     depends_on:
       - tourguide-db
 
-  tourguide-front:
-    image: tourguide-front
-    build: ../Tourist-Guide-Frontend-App
-    ports:
-      - 80:3000
-    depends_on:
-      - tourguide-back
+  # tourguide-front:
+  #   image: tourguide-front
+  #   build: ../Tourist-Guide-Frontend-App
+  #   ports:
+  #     - 80:3000
+  #   depends_on:
+  #     - tourguide-back
 
 volumes:
   tourguide-db-vol:
