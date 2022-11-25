@@ -4,6 +4,7 @@ services:
     build: db-docker
     volumes:
       - tourguide-db-vol:/var/lib/mysql
+    restart: unless-stopped
 
   # tourguide-phpmyadmin:
   #   image: phpmyadmin:latest
@@ -16,6 +17,7 @@ services:
   #     - PMA_PASSWORD=hypers
   #   depends_on:
   #     - tourguide-db
+  #   restart: unless-stopped
   
   tourguide-back:
     image: tourguide-back
@@ -24,6 +26,7 @@ services:
       - 8080:8080
     depends_on:
       - tourguide-db
+    restart: unless-stopped
 
   # tourguide-front:
   #   image: tourguide-front
@@ -32,6 +35,7 @@ services:
   #     - 80:3000
   #   depends_on:
   #     - tourguide-back
+  #   restart: unless-stopped
 
 volumes:
   tourguide-db-vol:
