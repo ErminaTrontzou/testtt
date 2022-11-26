@@ -24,8 +24,11 @@ public class ImageService {
         return imageRepository.findById(id).get();
     }
 
-
     public Page<Image> getImageByTitle(String title, Pageable pageable){
         return  imageRepository.findAllImagesByTitle(title, pageable);
+    }
+
+    public int getImageCount(String title){
+        return imageRepository.countImagesByTitle(title);
     }
 }
