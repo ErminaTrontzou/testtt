@@ -14,6 +14,9 @@ import okhttp3.MediaType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,16 +59,24 @@ public class ImageController {
 
     @Transactional
     @GetMapping("/getByTitle/{title}")
-    public ResponseEntity<?> imageByTitle(@PathVariable String title){
+    public ResponseEntity<?> imageByTitle(@PathVariable String title,
+                                          @RequestParam(value="page", defaultValue = "1") int page,
+                                          @RequestParam(value = "size", defaultValue = "8") int size) {
         int imagesCount = imageService.getImageCount(title);
         if (imagesCount != 0){
-            List<Image> imageResponse = imageService.getImageByTitle(title);
-            return new ResponseEntity<List<Image>>(imageResponse, HttpStatus.OK);
-        }
-        HashMap<String, String> returnMap = new HashMap<String, String>();
-        returnMap.put("status", "error");
-        returnMap.put("message", "No images with your search criteria");
-        return ResponseEntity.status(204).body(returnMap);
+            Pageable paging = PageRequest.of(page, size);
+            Page<Image> imagesPage = imageRepository.findAllImagesByTitle(title, paging);
+            if (imagesPage.getContent().isEmpty()) {
+                if (getFlickr(title)) {
+                    imagesPage = imageService.getImageByTitle(title, paging);
+                }
+            }
+            return new ResponseEntity<>(imagesPage, HttpStatus.OK);
+         }
+         HashMap<String, String> returnMap = new HashMap<String, String>();
+         returnMap.put("status", "error");
+         returnMap.put("message", "No images with your search criteria");
+         return ResponseEntity.status(204).body(returnMap);
     }
 }
 

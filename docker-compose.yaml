@@ -1,0 +1,41 @@
+services:
+  tourguide-db:
+    image: tourguide-db
+    build: db-docker
+    volumes:
+      - tourguide-db-vol:/var/lib/mysql
+    restart: unless-stopped
+
+  # tourguide-phpmyadmin:
+  #   image: phpmyadmin:latest
+  #   ports:
+  #     - 80:80
+  #   environment:
+  #     - PMA_HOST=tourguide-db
+  #     - PMA_PORT=3306
+  #     - PMA_USER=ermina
+  #     - PMA_PASSWORD=hypers
+  #   depends_on:
+  #     - tourguide-db
+  #   restart: unless-stopped
+  
+  tourguide-back:
+    image: tourguide-back
+    build: ./
+    ports:
+      - 8080:8080
+    depends_on:
+      - tourguide-db
+    restart: unless-stopped
+
+  # tourguide-front:
+  #   image: tourguide-front
+  #   build: ../Tourist-Guide-Frontend-App
+  #   ports:
+  #     - 80:3000
+  #   depends_on:
+  #     - tourguide-back
+  #   restart: unless-stopped
+
+volumes:
+  tourguide-db-vol:

@@ -3,6 +3,8 @@ package gr.thegoodsideofe1.tourguide.services;
 import gr.thegoodsideofe1.tourguide.entities.Image;
 import gr.thegoodsideofe1.tourguide.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,8 +24,8 @@ public class ImageService {
         return imageRepository.findById(id).get();
     }
 
-    public List<Image> getImageByTitle(String title){
-        return imageRepository.findAllImagesByTitle(title);
+    public Page<Image> getImageByTitle(String title, Pageable pageable){
+        return  imageRepository.findAllImagesByTitle(title, pageable);
     }
 
     public int getImageCount(String title){
