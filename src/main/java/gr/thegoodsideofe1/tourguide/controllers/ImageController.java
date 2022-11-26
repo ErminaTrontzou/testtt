@@ -66,11 +66,6 @@ public class ImageController {
         if (imagesCount != 0){
             Pageable paging = PageRequest.of(page, size);
             Page<Image> imagesPage = imageRepository.findAllImagesByTitle(title, paging);
-            if (imagesPage.getContent().isEmpty()) {
-                if (getFlickr(title)) {
-                    imagesPage = imageService.getImageByTitle(title, paging);
-                }
-            }
             return new ResponseEntity<>(imagesPage, HttpStatus.OK);
          }
          HashMap<String, String> returnMap = new HashMap<String, String>();
