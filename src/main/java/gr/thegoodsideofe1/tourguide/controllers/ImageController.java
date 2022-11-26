@@ -62,7 +62,10 @@ public class ImageController {
             List<Image> imageResponse = imageService.getImageByTitle(title);
             return new ResponseEntity<List<Image>>(imageResponse, HttpStatus.OK);
         }
-        return new ResponseEntity<Image>(HttpStatus.NO_CONTENT);
+        HashMap<String, String> returnMap = new HashMap<String, String>();
+        returnMap.put("status", "error");
+        returnMap.put("message", "No images with your search criteria");
+        return ResponseEntity.status(204).body(returnMap);
     }
 }
 
