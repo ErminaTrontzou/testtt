@@ -9,7 +9,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,8 +57,8 @@ public class FlickrController {
         flickrAPIURl += "&privacy_filter=1";
         flickrAPIURl += "&accuracy=11";
         flickrAPIURl += "&content_type=1";
-        flickrAPIURl += "&media=all";
-        flickrAPIURl += "&extras=geo, description, media, tags, url_o, date_upload, date_taken, views, owner_name";
+        flickrAPIURl += "&media=photo";
+        flickrAPIURl += "&extras=geo, description, media, tags, url_o, url_m,date_upload, date_taken, views, owner_name";
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -75,7 +78,7 @@ public class FlickrController {
         return true;
     }
 
-    private void serializeFlickrResponseData(JSONObject allData){
+    private void serializeFlickrResponseData(JSONObject allData) {
         JSONObject photosObj = new JSONObject(allData.get("photos").toString());
         JSONArray photoArray = new JSONArray(photosObj.get("photo").toString());
 
@@ -84,20 +87,24 @@ public class FlickrController {
             JSONObject singlePhotoDescription = new JSONObject(singlePhotoObj.get("description").toString());
 
             Image imageToSave = new Image();
-            imageToSave.setTitle(singlePhotoObj.getString("title"));
-            imageToSave.setDescription(singlePhotoDescription.getString("_content"));
-            imageToSave.setLatitude(singlePhotoObj.getString("latitude"));
-            imageToSave.setLongitude(singlePhotoObj.getString("longitude"));
-            imageToSave.setFileName(singlePhotoObj.getString("url_o"));
-            imageToSave.setDateTaken(singlePhotoObj.getString("datetaken"));
-            imageToSave.setViews(Integer.parseInt(singlePhotoObj.getString("views")));
-            imageToSave.setOwnerName(singlePhotoObj.getString("ownername"));
+            try {
+                imageToSave.setDescription(singlePhotoDescription.getString("_content"));
+                imageToSave.setTitle(Jsoup.clean(singlePhotoObj.getString("title"), Safelist.relaxed()));
+                imageToSave.setLatitude(singlePhotoObj.getString("latitude"));
+                imageToSave.setLongitude(singlePhotoObj.getString("longitude"));
+                imageToSave.setFileName(singlePhotoObj.getString("url_o"));
+                imageToSave.setDateTaken(singlePhotoObj.getString("datetaken"));
+                imageToSave.setViews(Integer.parseInt(singlePhotoObj.getString("views")));
+                imageToSave.setOwnerName(singlePhotoObj.getString("ownername"));
+                imageToSave.setThumbnail(singlePhotoObj.getString("url_m"));
+                Set<Tag> allTagsToSave = serializeTags(singlePhotoObj.getString("tags"));
+                imageToSave.setTags(allTagsToSave);
 
-            Set<Tag> allTagsToSave = serializeTags(singlePhotoObj.getString("tags"));
-            imageToSave.setTags(allTagsToSave);
+                System.out.println(imageToSave.getTitle());
+                imageRepository.save(imageToSave);
+            }catch(JSONException e){
 
-            System.out.println(imageToSave.getTitle());
-            imageRepository.save(imageToSave);
+            }
         }
     }
 
