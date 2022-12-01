@@ -11,8 +11,6 @@ public class Image implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name="file_name")
-    private String fileName;
     @Column(name="description")
     private String description;
     @Column(name="title")
@@ -27,6 +25,10 @@ public class Image implements Serializable {
     private String ownerName;
     @Column(name="date_taken")
     private String dateTaken;
+    @Column(name="file_name")
+    private String fileName;
+    @Column(name="thumbnail")
+    private String thumbnail;
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -52,7 +54,7 @@ public class Image implements Serializable {
 
     }
 
-    public Image(int id,String fileName, String description, String title, String latitude, String longitude, int views,String ownerName, String dateTaken){
+    public Image(int id,String fileName, String description, String title, String latitude, String longitude, int views,String ownerName, String dateTaken, String thumbnail){
         this.id=id;
         this.fileName =fileName;
         this.description=description;
@@ -62,6 +64,7 @@ public class Image implements Serializable {
         this.views=views;
         this.ownerName =ownerName;
         this.dateTaken =dateTaken;
+        this.thumbnail=thumbnail;
     }
 
 
@@ -72,6 +75,12 @@ public class Image implements Serializable {
         this.id=id;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 
     public String getFileName(){
         return this.fileName;
@@ -136,11 +145,7 @@ public class Image implements Serializable {
         this.dateTaken = dateTaken;
     }
 
-
-
-
-
-//    @Override
+    //    @Override
 //    public int hashCode() {
 //        return Objects.hash(id);
 //    }
