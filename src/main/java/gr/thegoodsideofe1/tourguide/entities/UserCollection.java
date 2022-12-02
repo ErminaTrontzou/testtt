@@ -2,6 +2,7 @@ package gr.thegoodsideofe1.tourguide.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_collections")
@@ -18,6 +19,22 @@ public class UserCollection implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_collections_images",
+            joinColumns = {
+                    @JoinColumn(name = "user_collection_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "image_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+    private Set<Image> images;
+
+    public Set<Image> getImages(){
+        return images;
+    }
+    public void setImages(Set<Image> tags) {
+        this.images = tags;
+    }
 
     public UserCollection(int id, String name, String description, boolean isPublic, User userID){
         this.id = id;
