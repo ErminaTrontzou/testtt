@@ -5,6 +5,7 @@ import gr.thegoodsideofe1.tourguide.controllers.Responder;
 import gr.thegoodsideofe1.tourguide.entities.User;
 import gr.thegoodsideofe1.tourguide.entities.UserCollection;
 import gr.thegoodsideofe1.tourguide.repositories.UserCollectionRepository;
+import gr.thegoodsideofe1.tourguide.responses.UserCollectionResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class UserCollectionService {
     AES_ENCRYPTION aes_encryption;
     @Autowired
     UserService userService;
+    UserCollectionResponses userCollectionResponses = new UserCollectionResponses();
 
     public ResponseEntity<?> listAllCollections(Map<String, String> requestBody) {
         if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
@@ -38,16 +40,16 @@ public class UserCollectionService {
                         return new ResponseEntity<>(userCollectionRepository.findAll(), HttpStatus.OK);
                     }
                     //User is NOT Admin
-                    return new ResponseEntity<>(noAccessToInformation(), HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>(userCollectionResponses.noAccessToInformation(), HttpStatus.UNAUTHORIZED);
                 }
                 //User is NOT Logged In
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             } catch (Exception e){
                 //Exception During JWT Decrypt
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             }
         }
-        return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(userCollectionResponses.noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> getSpecificCollection(Map<String, String> requestBody, Integer collectionID){
@@ -64,16 +66,16 @@ public class UserCollectionService {
                         return new ResponseEntity<>(userCollectionRepository.findById(collectionID).get(), HttpStatus.OK);
                     }
                     //User is NOT Admin
-                    return new ResponseEntity<>(noAccessToInformation(), HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>(userCollectionResponses.noAccessToInformation(), HttpStatus.UNAUTHORIZED);
                 }
                 //User is NOT Logged In
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             } catch (Exception e){
                 //Exception During JWT Decrypt
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             }
         }
-        return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(userCollectionResponses.noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> updateSpecificCollection(Map<String, String> requestBody, Integer collectionID){
@@ -89,19 +91,19 @@ public class UserCollectionService {
                         //User is Admin or user is owner of the collection
                         userCollection = modifyUserCollectionOnUpdate(requestBody, userCollection);
                         userCollectionRepository.save(userCollection);
-                        return new ResponseEntity<>(collectionUpdatedSuccessfully(), HttpStatus.OK);
+                        return new ResponseEntity<>(userCollectionResponses.collectionUpdatedSuccessfully(), HttpStatus.OK);
                     }
                     //User is NOT Admin
-                    return new ResponseEntity<>(noAccessToInformation(), HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>(userCollectionResponses.noAccessToInformation(), HttpStatus.UNAUTHORIZED);
                 }
                 //User is NOT Logged In
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             } catch (Exception e){
                 //Exception During JWT Decrypt
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             }
         }
-        return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(userCollectionResponses.noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> addNewCollection(Map<String, String> requestBody){
@@ -113,18 +115,18 @@ public class UserCollectionService {
                 if (loginUser != null) {
                     if (isBodyValid(requestBody)){
                         userCollectionRepository.save(generateNewUserCollection(requestBody, loginUser));
-                        return new ResponseEntity<>(collectionSavedSuccessfully(), HttpStatus.CREATED);
+                        return new ResponseEntity<>(userCollectionResponses.collectionSavedSuccessfully(), HttpStatus.CREATED);
                     }
                     return new ResponseEntity<>(checkMissingField(requestBody), HttpStatus.OK);
                 }
                 //User is NOT Logged In
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             } catch (Exception e) {
                 //Exception During JWT Decrypt
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             }
         }
-        return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(userCollectionResponses.noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
     public ResponseEntity<?> deleteCollection(Map<String, String> requestBody, Integer collectionID){
@@ -139,19 +141,19 @@ public class UserCollectionService {
                     if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
                         //User is Admin or user is owner of the collection
                         userCollectionRepository.delete(userCollection);
-                        return new ResponseEntity<>(collectionDeletedSuccessfully(), HttpStatus.OK);
+                        return new ResponseEntity<>(userCollectionResponses.collectionDeletedSuccessfully(), HttpStatus.OK);
                     }
                     //User is NOT Admin
-                    return new ResponseEntity<>(noAccessToInformation(), HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>(userCollectionResponses.noAccessToInformation(), HttpStatus.UNAUTHORIZED);
                 }
                 //User is NOT Logged In
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             } catch (Exception e){
                 //Exception During JWT Decrypt
-                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
             }
         }
-        return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(userCollectionResponses.noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
     protected UserCollection modifyUserCollectionOnUpdate(Map<String, String> requestBody, UserCollection existingUserCollection){
@@ -187,75 +189,19 @@ public class UserCollectionService {
 
     protected HashMap<String, String> checkMissingField(Map<String, String> requestBody){
         if (!requestBody.containsKey("name")){
-            return missingBodyField("name");
+            return userCollectionResponses.missingBodyField("name");
         }
         if (!requestBody.containsKey("description")){
-            return missingBodyField("description");
+            return userCollectionResponses.missingBodyField("description");
         }
         if (!requestBody.containsKey("public")){
-            return missingBodyField("public");
+            return userCollectionResponses.missingBodyField("public");
         }
-        return generalError();
+        return userCollectionResponses.generalError();
     }
 
     protected String[] getUserDetailsFromJWT(String token) throws Exception {
         String decryptedString = aes_encryption.decrypt(token);
         return decryptedString.split(",");
-    }
-
-    protected HashMap<String, String> noValidJWTResponse(){
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "error");
-        hashMapToReturn.put("message", "Provide Valid JWT");
-        return hashMapToReturn;
-    }
-
-    protected HashMap<String, String> userIsNotLoggedIN(){
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "error");
-        hashMapToReturn.put("message", "NOT Valid JWT");
-        return hashMapToReturn;
-    }
-
-    protected HashMap<String, String> noAccessToInformation() {
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "error");
-        hashMapToReturn.put("message", "You have no access to this information");
-        return hashMapToReturn;
-    }
-
-    protected HashMap<String, String> collectionUpdatedSuccessfully() {
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "success");
-        hashMapToReturn.put("message", "Collection Updated");
-        return hashMapToReturn;
-    }
-
-    protected HashMap<String, String> missingBodyField(String missingParam) {
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "error");
-        hashMapToReturn.put("message", "Field '" + missingParam + "' is missing");
-        return hashMapToReturn;
-    }
-
-    protected HashMap<String, String> generalError() {
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "error");
-        hashMapToReturn.put("message", "There was an error during execution");
-        return hashMapToReturn;
-    }
-
-    protected HashMap<String, String> collectionSavedSuccessfully() {
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "success");
-        hashMapToReturn.put("message", "Collection Saved");
-        return hashMapToReturn;
-    }
-
-    protected HashMap<String, String> collectionDeletedSuccessfully() {
-        HashMap<String, String> hashMapToReturn = new HashMap<>();
-        hashMapToReturn.put("status", "success");
-        hashMapToReturn.put("message", "Collection Deleted");
-        return hashMapToReturn;
     }
 }
