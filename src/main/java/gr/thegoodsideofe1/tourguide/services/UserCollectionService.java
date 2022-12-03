@@ -154,18 +154,6 @@ public class UserCollectionService {
         return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
-    public void saveCollection(UserCollection collection){
-        userCollectionRepository.save(collection);
-    }
-
-    public UserCollection getCollection(Integer id){
-        return userCollectionRepository.findById(id).get();
-    }
-
-    public void deleteCollection(Integer id){
-        userCollectionRepository.deleteById(id);
-    }
-
     protected UserCollection modifyUserCollectionOnUpdate(Map<String, String> requestBody, UserCollection existingUserCollection){
         try {
             existingUserCollection.setName(requestBody.get("name"));
