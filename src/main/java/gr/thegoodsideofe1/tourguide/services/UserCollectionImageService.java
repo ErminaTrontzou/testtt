@@ -63,6 +63,37 @@ public class UserCollectionImageService {
         return new ResponseEntity<>(userCollectionResponses.noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
+    public ResponseEntity<?> removeImageFromCollection(Map<String, String> requestBody, Integer collectionImageID){
+        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
+            String requestJWTToken = requestBody.get("Bearer");
+            try {
+                String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
+                User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
+                if (loginUser != null) {
+                    //User is Logged IN
+                    if (!userCollectionImagesRepository.existsById(collectionImageID)) {
+                        return new ResponseEntity<>(userCollectionResponses.collectionImageDoesNotExists(), HttpStatus.OK);
+                    }
+                    UserCollectionImage userCollectionImage = userCollectionImagesRepository.findById(collectionImageID).get();
+                    UserCollection userCollection = userCollectionRepository.findById(userCollectionImage.getUserCollectionId()).get();
+                    if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()){
+                        //User is Admin or owner of the collection
+                        userCollectionImagesRepository.deleteById(collectionImageID);
+                        return new ResponseEntity<>(userCollectionResponses.collectionImageDeleted(), HttpStatus.OK);
+                    }
+                    //User is NOT Admin
+                    return new ResponseEntity<>(userCollectionResponses.noAccessToInformation(), HttpStatus.UNAUTHORIZED);
+                }
+                //User is NOT Logged In
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+            } catch (Exception e){
+                //Exception During JWT Decrypt
+                return new ResponseEntity<>(userCollectionResponses.userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+            }
+        }
+        return new ResponseEntity<>(userCollectionResponses.noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+    }
+
     protected String[] getUserDetailsFromJWT(String token) throws Exception {
         String decryptedString = aes_encryption.decrypt(token);
         return decryptedString.split(",");

@@ -35,49 +35,8 @@ public class UserCollectionImageController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String remove(@RequestBody Map<String, String> requestBody, @PathVariable Integer id) throws Exception {
-        JSONArray arrayToReturn = new JSONArray();
-
-        String requestJWTToken = requestBody.get("Bearer");
-        String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
-        User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
-
-//        if (loginUser != null) {
-//            //User is Logged In
-//            UserCollectionImage userCollectionImage = userCollectionImageService.getCollectionImage(id);
-//            UserCollection userCollection = userCollectionService.getCollection(userCollectionImage.getUser_collection_id());
-//            if (userCollection != null) {
-//                //Collection Exists
-//                User userCollectionDetails = userService.getUser(userCollection.getUser_id());
-//                if (userCollectionDetails.getId() == loginUser.getId()) {
-//                    //Logged in user is same as collection owner
-//                    userCollectionImageService.deleteCollectionImage(id);
-//                    JSONObject singleCollection = new JSONObject();
-//                    singleCollection.put("status", "success");
-//                    singleCollection.put("message", "Collection Image deleted successfully.");
-//                    arrayToReturn.put(singleCollection);
-//                } else {
-//                    //Logged in user is NOT same as collection owner
-//                    JSONObject singleCollection = new JSONObject();
-//                    singleCollection.put("status", "error");
-//                    singleCollection.put("message", "Collection is owned by another user.");
-//                    arrayToReturn.put(singleCollection);
-//                }
-//            } else {
-//                //Collection Does NOT exists
-//                JSONObject singleCollection = new JSONObject();
-//                singleCollection.put("status", "error");
-//                singleCollection.put("message", "You User Collection does NOT exists !");
-//                arrayToReturn.put(singleCollection);
-//            }
-//        } else {
-//            //User is NOT logged in
-//            JSONObject singleCollection = new JSONObject();
-//            singleCollection.put("status", "error");
-//            singleCollection.put("message", "You must provide JWT first");
-//            arrayToReturn.put(singleCollection);
-//        }
-        return arrayToReturn.toString();
+    public ResponseEntity<?> remove(@RequestBody Map<String, String> requestBody, @PathVariable Integer id) {
+        return userCollectionImageService.removeImageFromCollection(requestBody, id);
     }
 
     private String[] getUserDetailsFromJWT(String token) throws Exception {
