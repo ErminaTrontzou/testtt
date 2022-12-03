@@ -33,33 +33,13 @@ public class UserCollectionController {
     private UserService userService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> list(@RequestBody Map<String, String> requestBody) throws Exception {
+    public ResponseEntity<?> list(@RequestBody Map<String, String> requestBody) {
         return userCollectionService.listAllCollections(requestBody);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Object> specific(@RequestBody Map<String, String> requestBody, @PathVariable Integer id) throws Exception {
-//        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
-//            String requestJWTToken = requestBody.get("Bearer");
-//            String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
-//            User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
-//
-//            if (loginUser != null) {
-//                //User is Logged in
-//                UserCollection userCollection = userCollectionService.getCollection(id);
-//                if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
-//                    //User is Admin or is Owner of the User Collection
-//                    return Responder.generateResponse("success", HttpStatus.OK, userCollection);
-//                } else {
-//                    //User is NOT Admin
-//                    return Responder.generateResponse("You have no access to this information", HttpStatus.UNAUTHORIZED, Object.class);
-//                }
-//            } else {
-//                //User is NOT logged in
-//                return Responder.generateResponse("Not Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
-//            }
-//        }
-        return Responder.generateResponse("Provide Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
+    public ResponseEntity<?> specific(@RequestBody Map<String, String> requestBody, @PathVariable Integer id) {
+        return userCollectionService.getSpecificCollection(requestBody, id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)

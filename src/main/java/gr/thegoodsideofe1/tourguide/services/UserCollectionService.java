@@ -50,6 +50,32 @@ public class UserCollectionService {
         return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
+    public ResponseEntity<?> getSpecificCollection(Map<String, String> requestBody, Integer collectionID){
+        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
+            String requestJWTToken = requestBody.get("Bearer");
+            try {
+                String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
+                User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
+                if (loginUser != null) {
+                    //User is Logged IN
+                    UserCollection userCollection = userCollectionRepository.findById(collectionID).get();
+                    if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
+                        //User is Admin or user is owner of the collection
+                        return new ResponseEntity<>(userCollectionRepository.findById(collectionID).get(), HttpStatus.OK);
+                    }
+                    //User is NOT Admin
+                    return new ResponseEntity<>(noAccessToInformation(), HttpStatus.UNAUTHORIZED);
+                }
+                //User is NOT Logged In
+                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+            } catch (Exception e){
+                //Exception During JWT Decrypt
+                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+            }
+        }
+        return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+    }
+
     public void saveCollection(UserCollection collection){
         userCollectionRepository.save(collection);
     }
