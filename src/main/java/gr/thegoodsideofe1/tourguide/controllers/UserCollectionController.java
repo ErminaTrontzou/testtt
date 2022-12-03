@@ -34,40 +34,7 @@ public class UserCollectionController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> list(@RequestBody Map<String, String> requestBody) throws Exception {
-        return new ResponseEntity<>(userCollectionService.listAllCollections(), HttpStatus.OK);
-//        //Get User Collections
-//        //Returns User Collection for logged in user
-//        //Returns all user collection if logged in user is admin
-//        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
-//            String requestJWTToken = requestBody.get("Bearer");
-//            String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
-//            User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
-//
-//            if (loginUser != null) {
-//                //User is Logged in
-//                if (loginUser.getIsAdmin()) {
-//                    //User is Admin
-//                    List<UserCollection> allUserCollection = userCollectionService.listAllCollections();
-//                    List<JSONObject> allUserCollectionEntities = new ArrayList<JSONObject>();
-//                    for (UserCollection userCollection : allUserCollection) {
-//                        JSONObject collection = new JSONObject();
-//                        collection.put("id", userCollection.getId());
-//                        collection.put("name", userCollection.getName());
-//                        collection.put("description", userCollection.getDescription());
-//                        collection.put("public", userCollection.getIsPublic());
-//                        collection.put("user_id", userCollection.getUser_id());
-//                    }
-//                    return Responder.generateResponse("success", HttpStatus.OK, allUserCollection.toArray());
-//                } else {
-//                    //User is NOT Admin
-//                    return Responder.generateResponse("You have no access to this information", HttpStatus.UNAUTHORIZED, Object.class);
-//                }
-//            } else {
-//                //User is NOT logged in
-//                return Responder.generateResponse("Not Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
-//            }
-//        }
-//        return Responder.generateResponse("Provide Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
+        return userCollectionService.listAllCollections(requestBody);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
