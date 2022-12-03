@@ -53,33 +53,8 @@ public class UserCollectionController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> delete(@RequestBody Map<String, String> requestBody, @PathVariable String id) throws Exception {
-//        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
-//            String requestJWTToken = requestBody.get("Bearer");
-//            String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
-//            User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
-//
-//            if (loginUser != null) {
-//                //User is Logged in
-//                UserCollection userCollection = userCollectionService.getCollection(Integer.valueOf(id));
-//                if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
-//                    //User is Admin or is Owner of the User Collection
-//                    //Delete Child
-//                    List<UserCollectionImage> allCollectionImages = userCollectionImageService.getAllCollectionImagesByCollectionID(userCollection.getId());
-//                    for (UserCollectionImage collectionImage : allCollectionImages){
-//                        userCollectionImageService.deleteCollectionImage(collectionImage.getId());
-//                    }
-//                    return Responder.generateResponse("User Collection Deleted", HttpStatus.OK, Object.class);
-//                } else {
-//                    //User is NOT Admin
-//                    return Responder.generateResponse("You have no access to this information", HttpStatus.UNAUTHORIZED, Object.class);
-//                }
-//            } else {
-//                //User is NOT logged in
-//                return Responder.generateResponse("Not Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
-//            }
-//        }
-        return Responder.generateResponse("Provide Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
+    public ResponseEntity<?> delete(@RequestBody Map<String, String> requestBody, @PathVariable Integer id) {
+        return userCollectionService.deleteCollection(requestBody, id);
     }
 
     private String[] getUserDetailsFromJWT(String token) throws Exception {
