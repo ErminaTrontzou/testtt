@@ -88,7 +88,7 @@ public class UserCollectionService {
                     if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
                         //User is Admin or user is owner of the collection
                         userCollection = modifyUserCollectionOnUpdate(requestBody, userCollection);
-                        saveCollection(userCollection);
+                        userCollectionRepository.save(userCollection);
                         return new ResponseEntity<>(collectionUpdatedSuccessfully(), HttpStatus.OK);
                     }
                     //User is NOT Admin
