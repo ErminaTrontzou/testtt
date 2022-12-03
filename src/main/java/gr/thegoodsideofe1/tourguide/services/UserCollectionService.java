@@ -104,6 +104,29 @@ public class UserCollectionService {
         return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
     }
 
+    public ResponseEntity<?> addNewCollection(Map<String, String> requestBody){
+        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
+            String requestJWTToken = requestBody.get("Bearer");
+            try {
+                String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
+                User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
+                if (loginUser != null) {
+                    if (isBodyValid(requestBody)){
+                        userCollectionRepository.save(generateNewUserCollection(requestBody, loginUser));
+                        return new ResponseEntity<>(collectionSavedSuccessfully(), HttpStatus.CREATED);
+                    }
+                    return new ResponseEntity<>(checkMissingField(requestBody), HttpStatus.OK);
+                }
+                //User is NOT Logged In
+                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+            } catch (Exception e) {
+                //Exception During JWT Decrypt
+                return new ResponseEntity<>(userIsNotLoggedIN(), HttpStatus.UNAUTHORIZED);
+            }
+        }
+        return new ResponseEntity<>(noValidJWTResponse(), HttpStatus.UNAUTHORIZED);
+    }
+
     public void saveCollection(UserCollection collection){
         userCollectionRepository.save(collection);
     }
@@ -125,6 +148,39 @@ public class UserCollectionService {
             return existingUserCollection;
         }
         return existingUserCollection;
+    }
+
+    protected UserCollection generateNewUserCollection(Map<String, String> requestBody, User collectionUser){
+        UserCollection newUserCollection = new UserCollection();
+        newUserCollection.setName(requestBody.get("name"));
+        newUserCollection.setDescription(requestBody.get("description"));
+        newUserCollection.setUser_id(collectionUser);
+        newUserCollection.setIsPublic(requestBody.get("public").equals("1"));
+        return newUserCollection;
+    }
+
+    protected boolean isBodyValid(Map<String, String> requestBody){
+        try {
+            requestBody.get("name");
+            requestBody.get("description");
+            requestBody.get("public");
+        } catch (ClassCastException | NullPointerException e){
+            return false;
+        }
+        return true;
+    }
+
+    protected HashMap<String, String> checkMissingField(Map<String, String> requestBody){
+        if (!requestBody.containsKey("name")){
+            return missingBodyField("name");
+        }
+        if (!requestBody.containsKey("description")){
+            return missingBodyField("description");
+        }
+        if (!requestBody.containsKey("public")){
+            return missingBodyField("public");
+        }
+        return generalError();
     }
 
     protected String[] getUserDetailsFromJWT(String token) throws Exception {
@@ -157,6 +213,27 @@ public class UserCollectionService {
         HashMap<String, String> hashMapToReturn = new HashMap<>();
         hashMapToReturn.put("status", "success");
         hashMapToReturn.put("message", "Collection Updated");
+        return hashMapToReturn;
+    }
+
+    protected HashMap<String, String> missingBodyField(String missingParam) {
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "error");
+        hashMapToReturn.put("message", "Field '" + missingParam + "' is missing");
+        return hashMapToReturn;
+    }
+
+    protected HashMap<String, String> generalError() {
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "error");
+        hashMapToReturn.put("message", "There was an error during execution");
+        return hashMapToReturn;
+    }
+
+    protected HashMap<String, String> collectionSavedSuccessfully() {
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "success");
+        hashMapToReturn.put("message", "Collection Saved");
         return hashMapToReturn;
     }
 }

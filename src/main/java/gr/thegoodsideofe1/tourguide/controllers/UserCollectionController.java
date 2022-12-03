@@ -48,27 +48,8 @@ public class UserCollectionController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<Object> add(@RequestBody Map<String, String> requestBody) throws Exception {
-//        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
-//            String requestJWTToken = requestBody.get("Bearer");
-//            String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
-//            User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
-//
-//            if (loginUser != null) {
-//                //User is Logged in
-//                UserCollection newUserCollection = new UserCollection();
-//                newUserCollection.setName(requestBody.get("name"));
-//                newUserCollection.setDescription(requestBody.get("description"));
-//                newUserCollection.setUser_id(loginUser);
-//                newUserCollection.setIsPublic(Boolean.getBoolean(requestBody.get("public")));
-//                userCollectionService.saveCollection(newUserCollection);
-//                return Responder.generateResponse("success", HttpStatus.OK, newUserCollection);
-//            } else {
-//                //User is NOT logged in
-//                return Responder.generateResponse("Not Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
-//            }
-//        }
-        return Responder.generateResponse("Provide Valid JWT", HttpStatus.UNAUTHORIZED, Object.class);
+    public ResponseEntity<?> add(@RequestBody Map<String, String> requestBody) {
+        return userCollectionService.addNewCollection(requestBody);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
