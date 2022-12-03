@@ -58,4 +58,18 @@ public class UserCollectionResponses {
         hashMapToReturn.put("message", "Collection Deleted");
         return hashMapToReturn;
     }
+
+    public HashMap<String, String> collectionImageAddedSuccessfully() {
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "success");
+        hashMapToReturn.put("message", "Collection Images Added");
+        return hashMapToReturn;
+    }
+
+    public HashMap<String, String> collectionDoesNotExists() {
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "error");
+        hashMapToReturn.put("message", "Collection does NOT exists");
+        return hashMapToReturn;
+    }
 }
