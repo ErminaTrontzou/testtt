@@ -1,7 +1,6 @@
 package gr.thegoodsideofe1.tourguide.services;
 
 import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
-import gr.thegoodsideofe1.tourguide.controllers.Responder;
 import gr.thegoodsideofe1.tourguide.entities.User;
 import gr.thegoodsideofe1.tourguide.entities.UserCollection;
 import gr.thegoodsideofe1.tourguide.repositories.UserCollectionRepository;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
