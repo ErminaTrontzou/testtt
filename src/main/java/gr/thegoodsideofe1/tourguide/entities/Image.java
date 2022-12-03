@@ -10,7 +10,7 @@ import java.util.*;
 public class Image implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Column(name="description")
     private String description;
     @Column(name="title")
@@ -54,7 +54,7 @@ public class Image implements Serializable {
 
     }
 
-    public Image(int id,String fileName, String description, String title, String latitude, String longitude, int views,String ownerName, String dateTaken, String thumbnail){
+    public Image(long id,String fileName, String description, String title, String latitude, String longitude, int views,String ownerName, String dateTaken, String thumbnail){
         this.id=id;
         this.fileName =fileName;
         this.description=description;
@@ -68,10 +68,10 @@ public class Image implements Serializable {
     }
 
 
-    public int getId(){
+    public long getId(){
         return this.id;
     }
-    public void setId(int id){
+    public void setId(long id){
         this.id=id;
     }
 

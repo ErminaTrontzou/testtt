@@ -28,7 +28,7 @@ public class TagService {
         return tagRepository.getByTagName(name);
     }
 
-    public Tag getTagByTagName(String nameToSearch){
+    public List<Tag> getTagByTagName(String nameToSearch){
         return tagRepository.getTagByTagName(nameToSearch);
     }
 

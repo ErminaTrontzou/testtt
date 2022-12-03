@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.xml.bind.SchemaOutputResolver;
 import java.io.IOException;
 import java.util.*;
 
@@ -35,11 +36,9 @@ public class FlickrController {
     @Transactional
     @GetMapping("/getByTitle/{title}")
     public ResponseEntity<?> getNewImages(@PathVariable String title){
-        if (getFlickr(title)){
-            HashMap<String, String> returnMap = new HashMap<String, String>();
-            returnMap.put("status", "success");
-            returnMap.put("message", "Images Imported");
-            return ResponseEntity.status(201).body(returnMap);
+        List<Image> imageList = getFlickr(title);
+        if(imageList.size()!=0) {
+            return new ResponseEntity<>(imageList, HttpStatus.OK);
         }
         HashMap<String, String> returnMap = new HashMap<String, String>();
         returnMap.put("status", "error");
@@ -47,7 +46,7 @@ public class FlickrController {
         return ResponseEntity.status(200).body(returnMap);
     }
 
-    private boolean getFlickr(String title) {
+    private List<Image> getFlickr(String title) {
         String flickrAPIURl = "https://www.flickr.com/services/rest/";
         flickrAPIURl += "?method=flickr.photos.search";
         flickrAPIURl += "&api_key=d4e4f456722f8f76048260df1e0c1880";
@@ -71,42 +70,49 @@ public class FlickrController {
 
         try (Response response = client.newCall(request).execute()) {
             JSONObject flickResponse = convertFlickrResponseToJSON(response.body().string());
-            serializeFlickrResponseData(flickResponse);
-        } catch (IOException e){
-            return false;
+            return serializeFlickrResponseData(flickResponse);
+        } catch (IOException e) {
+            return new ArrayList<>();
         }
-        return true;
     }
 
-    private void serializeFlickrResponseData(JSONObject allData) {
+    private List<Image> serializeFlickrResponseData(JSONObject allData) {
         JSONObject photosObj = new JSONObject(allData.get("photos").toString());
         JSONArray photoArray = new JSONArray(photosObj.get("photo").toString());
+        List<Image> photoList = new ArrayList<>();
 
         for (int i = 0; i<photoArray.length(); i++){
             JSONObject singlePhotoObj = new JSONObject(photoArray.get(i).toString());
             JSONObject singlePhotoDescription = new JSONObject(singlePhotoObj.get("description").toString());
 
-            Image imageToSave = new Image();
+            Image imageToSend = new Image();
             try {
-                imageToSave.setDescription(singlePhotoDescription.getString("_content"));
-                imageToSave.setTitle(Jsoup.clean(singlePhotoObj.getString("title"), Safelist.relaxed()));
-                imageToSave.setLatitude(singlePhotoObj.getString("latitude"));
-                imageToSave.setLongitude(singlePhotoObj.getString("longitude"));
-                imageToSave.setFileName(singlePhotoObj.getString("url_o"));
-                imageToSave.setDateTaken(singlePhotoObj.getString("datetaken"));
-                imageToSave.setViews(Integer.parseInt(singlePhotoObj.getString("views")));
-                imageToSave.setOwnerName(singlePhotoObj.getString("ownername"));
-                imageToSave.setThumbnail(singlePhotoObj.getString("url_m"));
-                Set<Tag> allTagsToSave = serializeTags(singlePhotoObj.getString("tags"));
-                imageToSave.setTags(allTagsToSave);
-
-                System.out.println(imageToSave.getTitle());
-                imageRepository.save(imageToSave);
+                imageToSend.setId(Long.parseLong(singlePhotoObj.getString("id")));
+                imageToSend.setDescription(singlePhotoDescription.getString("_content"));
+                imageToSend.setTitle(Jsoup.clean(singlePhotoObj.getString("title"), Safelist.relaxed()));
+                imageToSend.setLatitude(singlePhotoObj.getString("latitude"));
+                imageToSend.setLongitude(singlePhotoObj.getString("longitude"));
+                imageToSend.setFileName(singlePhotoObj.getString("url_o"));
+                imageToSend.setDateTaken(singlePhotoObj.getString("datetaken"));
+                imageToSend.setViews(Integer.parseInt(singlePhotoObj.getString("views")));
+                imageToSend.setOwnerName(singlePhotoObj.getString("ownername"));
+                imageToSend.setThumbnail(singlePhotoObj.getString("url_m"));
+                Set<Tag> allTagsToSend = serializeTags(singlePhotoObj.getString("tags"));
+                imageToSend.setTags(allTagsToSend);
             }catch(JSONException e){
-
+                continue;
             }
+            photoList.add(imageToSend);
         }
+        return photoList;
     }
+
+    @PostMapping("/imageToSave")
+    public ResponseEntity<?>imageToSave(@RequestBody Image photo){
+        imageRepository.save(photo);
+        return new ResponseEntity<>("Photo Saved",HttpStatus.CREATED);
+    }
+
 
     private JSONObject convertFlickrResponseToJSON(String bodyData){
         //Trim Body Data String
@@ -129,8 +135,8 @@ public class FlickrController {
             long tagCount = tagService.getByTagName(tag);
             if (tagCount != 0){
                 //Tag Exists
-                Tag singleTagDB = tagService.getTagByTagName(tag);
-                imageTagsSet.add(singleTagDB);
+                List<Tag> singleTagDB = tagService.getTagByTagName(tag);
+                imageTagsSet.add(singleTagDB.get(0));
                 continue;
             }
             //Create Tag
