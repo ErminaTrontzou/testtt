@@ -1,6 +1,8 @@
 package gr.thegoodsideofe1.tourguide.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -29,7 +31,6 @@ public class Image implements Serializable {
     private String fileName;
     @Column(name="thumbnail")
     private String thumbnail;
-
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "image_tags",
