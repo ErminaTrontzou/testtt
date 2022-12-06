@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import gr.thegoodsideofe1.tourguide.entities.UserCollection;
+import gr.thegoodsideofe1.tourguide.entities.UserCollectionImage;
+
 
 import javax.transaction.Transactional;
 import java.security.MessageDigest;
@@ -123,5 +126,58 @@ public class UserController {
         }
         returnResponse.put("test", String.valueOf(passwordEncoder.matches(passwordParam, userToLogin.getPassword())));
         return returnResponse;
+    }
+
+    @RequestMapping(value = "/is-admin", method = RequestMethod.POST)
+    public ResponseEntity<?> checkUserIsAdmin(@RequestBody Map<String, String> requestBody){
+        if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
+            String requestJWTToken = requestBody.get("Bearer");
+            try {
+                String[] userDetails = this.getUserDetailsFromJWT(requestJWTToken);
+                User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
+                if (!loginUser.getIsAdmin()){
+                    return new ResponseEntity<>(userIsNotAdmin(), HttpStatus.OK);
+                }
+                return new ResponseEntity<>(userIsAdmin(), HttpStatus.OK);
+            } catch (Exception e){
+                return new ResponseEntity<>(notValidJWT(), HttpStatus.UNAUTHORIZED);
+            }
+        }
+        return new ResponseEntity<>(provideValidJWT(), HttpStatus.UNAUTHORIZED);
+    }
+
+    private String[] getUserDetailsFromJWT(String token) throws Exception {
+        String decryptedString = aes_encryption.decrypt(token);
+        return decryptedString.split(",");
+    }
+
+    private HashMap<String, String> userIsNotAdmin(){
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "error");
+        hashMapToReturn.put("is_admin", "false");
+        hashMapToReturn.put("message", "User Is Not Admin");
+        return hashMapToReturn;
+    }
+
+    private HashMap<String, String> userIsAdmin(){
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "error");
+        hashMapToReturn.put("is_admin", "true");
+        hashMapToReturn.put("message", "User Is Admin");
+        return hashMapToReturn;
+    }
+
+    private HashMap<String, String> notValidJWT(){
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "error");
+        hashMapToReturn.put("message", "Not Valid JWT");
+        return hashMapToReturn;
+    }
+
+    private HashMap<String, String> provideValidJWT(){
+        HashMap<String, String> hashMapToReturn = new HashMap<>();
+        hashMapToReturn.put("status", "error");
+        hashMapToReturn.put("message", "Provide Valid JWT");
+        return hashMapToReturn;
     }
 }

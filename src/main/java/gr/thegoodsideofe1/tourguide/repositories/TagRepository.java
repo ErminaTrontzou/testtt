@@ -15,5 +15,5 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
     public long getByTagName(@Param("nameToSearch") String nameToSearch);
 
     @Query(value = "SELECT t FROM Tag t WHERE t.name=:nameToSearch")
-    public Tag getTagByTagName(@Param("nameToSearch") String nameToSearch);
+    List<Tag> getTagByTagName(@Param("nameToSearch") String nameToSearch);
 }
