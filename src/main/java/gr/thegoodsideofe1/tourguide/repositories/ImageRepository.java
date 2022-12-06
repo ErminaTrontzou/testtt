@@ -10,8 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ImageRepository extends CrudRepository<Image, Integer> {
-    public List<Image> findAll();
+public interface ImageRepository extends CrudRepository<Image, Long> {
+     List<Image> findAll();
 
     @Query(value = "SELECT i FROM Image i WHERE i.title LIKE %:title% OR i.description LIKE %:title%")
     Page<Image> findAllImagesByTitle(@Param("title") String title, Pageable pageable);
