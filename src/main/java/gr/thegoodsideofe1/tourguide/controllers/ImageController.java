@@ -1,8 +1,6 @@
 package gr.thegoodsideofe1.tourguide.controllers;
 
-import gr.thegoodsideofe1.tourguide.repositories.ImageRepository;
 import gr.thegoodsideofe1.tourguide.services.ImageService;
-import gr.thegoodsideofe1.tourguide.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class ImageController {
     @Autowired
     ImageService imageService;
-
-    @Autowired
-    ImageRepository imageRepository;
-
-    @Autowired
-    TagService tagService;
-
-
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> list() {
