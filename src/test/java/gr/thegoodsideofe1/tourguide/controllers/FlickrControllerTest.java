@@ -16,14 +16,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(FlickrController.class)
@@ -62,27 +65,25 @@ public class FlickrControllerTest {
         mockImage.add(secondImage);
         mockImage.add(thirdImage);
 
-
-
         when(flickrService.getNewImagesForLocation(firstImage.getTitle())).thenReturn(new ResponseEntity(firstImage, HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("http://localhost:3000/api/v1/flickr/getByTitle/thessaloniki")
+                .get("http://localhost:8080/api/v1/flickr/getByTitle/thessaloniki")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title", Matchers.is("thessaloniki")));
     }
 
-//    @Test
-//    void saveAndImageViaFlickrController() throws Exception {
-//        HashMap<String, String> returnedMessage = new HashMap<>();
-//        when(flickrController.imageToSave(firstImage)).thenReturn(new ResponseEntity(returnedMessage, HttpStatus.CREATED));
-//
-//        String requestJson = objectWriter.writeValueAsString(firstImage);
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .post("http://localhost:3000/api/v1/flickr/imageToSave")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(requestJson))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void saveAndImageViaFlickrController() throws Exception {
+        HashMap<String, String> returnedMessage = new HashMap<>();
+        when(flickrController.imageToSave(firstImage)).thenReturn(new ResponseEntity(returnedMessage, HttpStatus.OK));
+
+        String requestJson = objectWriter.writeValueAsString(firstImage);
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("http://localhost:8080/api/v1/flickr/imageToSave")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isOk());
+    }
 }
