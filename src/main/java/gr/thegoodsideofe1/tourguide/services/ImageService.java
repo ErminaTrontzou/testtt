@@ -34,9 +34,7 @@ public class ImageService {
         }
     }
 
-    public ResponseEntity<?> getImageByTitle(String title,
-                                       @RequestParam(value="page", defaultValue = "1") int page,
-                                       @RequestParam(value = "size", defaultValue = "8") int size){
+    public ResponseEntity<?> getImageByTitle(String title, Integer page, Integer size){
         int imagesCount = imageRepository.countImagesByTitle(title);
         if (imagesCount != 0){
             Pageable paging = PageRequest.of(page, size);
