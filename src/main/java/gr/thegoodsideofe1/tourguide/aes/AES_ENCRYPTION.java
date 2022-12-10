@@ -17,6 +17,11 @@ public class AES_ENCRYPTION {
         key = keyGenerator.generateKey();
     }
 
+    public void destroy(){
+        key = null;
+        encryptionCipher = null;
+    }
+
     public String encrypt(String data) throws Exception {
         byte[] dataInBytes = data.getBytes();
         encryptionCipher = Cipher.getInstance("AES/GCM/NoPadding");
@@ -34,11 +39,11 @@ public class AES_ENCRYPTION {
         return new String(decryptedBytes);
     }
 
-    private String encode(byte[] data) {
+    public String encode(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
     }
 
-    private byte[] decode(String data) {
+    public byte[] decode(String data) {
         return Base64.getDecoder().decode(data);
     }
 }
