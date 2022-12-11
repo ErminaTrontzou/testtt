@@ -31,6 +31,8 @@ public class FlickrService {
     TagService tagService;
     FlickrResponses flickrResponses = new FlickrResponses();
 
+    public FlickrService(){}
+
     public ResponseEntity<?> getNewImagesForLocation(String location){
         List<Image> imageList = getFlickr(location);
         if(imageList.size()!=0) {
