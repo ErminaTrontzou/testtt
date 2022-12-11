@@ -1,9 +1,7 @@
 package gr.thegoodsideofe1.tourguide.controllers;
 
-import gr.thegoodsideofe1.tourguide.entities.Tag;
 import gr.thegoodsideofe1.tourguide.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,18 +15,13 @@ public class TagController {
     @Autowired
     TagService tagService;
 
-    @GetMapping("")
-    public List<Tag> list(){
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<?> list() {
         return tagService.listAllTags();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Tag> get (@PathVariable Integer id){
-        try{
-            Tag tag = tagService.getTag(id);
-            return new ResponseEntity<Tag>(tag, HttpStatus.OK);
-        }catch(NoSuchElementException e){
-            return new ResponseEntity<Tag>(HttpStatus.NOT_FOUND);
-        }
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getSpecificImage(@PathVariable int id) {
+        return tagService.getTag(id);
     }
 }

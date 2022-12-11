@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,9 +28,9 @@ public class User implements Serializable {
     @Column(name = "disabled")
     private boolean disabled;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", targetEntity = UserCollection.class ,fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<UserCollection> userCollections;
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<UserCollection> userCollections;
 
     private static final int encryptFactorLength = 2048;
 
