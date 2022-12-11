@@ -27,8 +27,8 @@ public class ImageController {
 
     @RequestMapping(value = "/getByTitle/{title}", method = RequestMethod.GET)
     public ResponseEntity<?> imageByTitle(@PathVariable String title,
-                                        @RequestParam(value="page", defaultValue = "1") int page,
-                                        @RequestParam(value = "size", defaultValue = "8") int size){
+                                        @RequestParam(value="page", defaultValue = "0") Integer page,
+                                        @RequestParam(value="size", defaultValue = "8") Integer size){
         return imageService.getImageByTitle(title,page,size);
     }
 }
