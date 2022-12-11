@@ -5,4 +5,4 @@ ENV MYSQL_DATABASE=tourguide
 ENV MYSQL_USER=ermina
 ENV MYSQL_PASSWORD=hypers
 
-COPY tourguide.sql /docker-entrypoint-initdb.d/
+COPY c4petalidis_proj.sql /docker-entrypoint-initdb.d/
