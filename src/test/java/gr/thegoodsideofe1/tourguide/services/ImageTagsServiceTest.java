@@ -12,9 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -64,6 +63,23 @@ public class ImageTagsServiceTest {
         final List<ImageTags> result = (List<ImageTags>) imageTagsService.getImageTagsByImageID(secondImageTag.getImageId());
         assertThat(result).isNotNull();
         assertEquals(2,result.size());
+    }
+
+    @Test
+    public void getImageTagWithIdFromRepository(){
+        when(imageTagsRepository.findById(firstImageTag.getId())).thenReturn(Optional.ofNullable(firstImageTag));
+        final ResponseEntity<ImageTags> result = (ResponseEntity<ImageTags>) imageTagsService.getImageTags(firstImageTag.getId());
+        assertThat(result).isNotNull();
+        assertEquals(200,result.getStatusCodeValue());
+        assertEquals(1, Objects.requireNonNull(result.getBody()).getId());
+    }
+
+    @Test
+    public  void noContentForGetImageTagByIdFromRepository(){
+        when(imageTagsRepository.findById(firstImageTag.getId())).thenThrow(new NoSuchElementException());
+        final ResponseEntity<ImageTags> result = (ResponseEntity<ImageTags>) imageTagsService.getImageTags(firstImageTag.getId());
+        assertThat(result).isNotNull();
+        assertEquals(404,result.getStatusCodeValue());
     }
 
 }
