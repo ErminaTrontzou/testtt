@@ -11,7 +11,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -40,13 +39,13 @@ public class ImageTagsServiceTest {
 
     @Test
     public void getAllImageTagsFromRepository() {
-        List<ImageTags> mockImageTags = new ArrayList<>();
-        mockImageTags.add(firstImageTag);
-        mockImageTags.add(secondImageTag);
-        mockImageTags.add(thirdImageTag);
-        mockImageTags.add(fourthImageTag);
+        List<ImageTags> imageTags = new ArrayList<>();
+        imageTags.add(firstImageTag);
+        imageTags.add(secondImageTag);
+        imageTags.add(thirdImageTag);
+        imageTags.add(fourthImageTag);
 
-        when(imageTagsRepository.findAll()).thenReturn(mockImageTags);
+        when(imageTagsRepository.findAll()).thenReturn(imageTags);
         final ResponseEntity<List<ImageTags>> result = (ResponseEntity<List<ImageTags>>) imageTagsService.listAllImageTags();
         assertThat(result).isNotNull();
         assertEquals(200,result.getStatusCodeValue());
