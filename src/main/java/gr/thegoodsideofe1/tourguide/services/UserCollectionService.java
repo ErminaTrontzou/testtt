@@ -3,6 +3,8 @@ package gr.thegoodsideofe1.tourguide.services;
 import gr.thegoodsideofe1.tourguide.aes.AES_ENCRYPTION;
 import gr.thegoodsideofe1.tourguide.entities.User;
 import gr.thegoodsideofe1.tourguide.entities.UserCollection;
+import gr.thegoodsideofe1.tourguide.entities.UserCollectionImage;
+import gr.thegoodsideofe1.tourguide.repositories.UserCollectionImageRepository;
 import gr.thegoodsideofe1.tourguide.repositories.UserCollectionRepository;
 import gr.thegoodsideofe1.tourguide.responses.UserCollectionResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,6 +27,8 @@ public class UserCollectionService {
     @Autowired
     UserService userService;
     UserCollectionResponses userCollectionResponses = new UserCollectionResponses();
+    @Autowired
+    private UserCollectionImageRepository userCollectionImageRepository;
 
     public ResponseEntity<?> listAllCollections(Map<String, String> requestBody) {
         if (requestBody.containsKey("Bearer") && !requestBody.get("Bearer").isEmpty()) {
@@ -112,8 +117,9 @@ public class UserCollectionService {
                 User loginUser = userService.getUserByParams(userDetails[1], userDetails[0], userDetails[2], userDetails[3]);
                 if (loginUser != null) {
                     if (isBodyValid(requestBody)){
-                        userCollectionRepository.save(generateNewUserCollection(requestBody, loginUser));
-                        return new ResponseEntity<>(userCollectionResponses.collectionSavedSuccessfully(), HttpStatus.CREATED);
+                        UserCollection userCollectionToCreate = generateNewUserCollection(requestBody, loginUser);
+                        userCollectionRepository.save(userCollectionToCreate);
+                        return new ResponseEntity<>(userCollectionToCreate, HttpStatus.CREATED);
                     }
                     return new ResponseEntity<>(checkMissingField(requestBody), HttpStatus.OK);
                 }
@@ -138,7 +144,12 @@ public class UserCollectionService {
                     UserCollection userCollection = userCollectionRepository.findById(collectionID).get();
                     if (loginUser.getIsAdmin() || userCollection.getUser_id().getId() == loginUser.getId()) {
                         //User is Admin or user is owner of the collection
-                        userCollectionRepository.delete(userCollection);
+                        //Delete all Collection Images
+//                        List<UserCollectionImage> allCollectionImages = userCollectionImageRepository.getAllByCollectionID(collectionID);
+//                        for (int i = 0; i<allCollectionImages.size(); i++){
+//                            userCollectionImageRepository.deleteById(allCollectionImages.get(i).getId());
+//                        }
+                        userCollectionRepository.deleteById(userCollection.getId());
                         return new ResponseEntity<>(userCollectionResponses.collectionDeletedSuccessfully(), HttpStatus.OK);
                     }
                     //User is NOT Admin

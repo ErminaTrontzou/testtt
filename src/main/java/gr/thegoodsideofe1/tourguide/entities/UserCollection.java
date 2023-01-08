@@ -19,7 +19,7 @@ public class UserCollection implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_collections_images",
             joinColumns = {
                     @JoinColumn(name = "user_collection_id", referencedColumnName = "id",
