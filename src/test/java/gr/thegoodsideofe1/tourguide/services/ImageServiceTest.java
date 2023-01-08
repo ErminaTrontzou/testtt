@@ -28,9 +28,6 @@ public class ImageServiceTest {
     @Mock
     private ImageResponses imageResponses;
 
-    @Mock
-    private Page<Image> imagePage;
-
     @InjectMocks
     private ImageService imageService;
 
@@ -48,12 +45,12 @@ public class ImageServiceTest {
     @Test
     public void getAllMockImagesFromRepository(){
 
-        List<Image> mockImage = new ArrayList<>();
-        mockImage.add(firstImage);
-        mockImage.add(secondImage);
-        mockImage.add(thirdImage);
+        List<Image> images = new ArrayList<>();
+        images.add(firstImage);
+        images.add(secondImage);
+        images.add(thirdImage);
 
-        when(imageRepository.findAll()).thenReturn(mockImage);
+        when(imageRepository.findAll()).thenReturn(images);
         final ResponseEntity<List<Image>> result = (ResponseEntity<List<Image>>) imageService.listAllImages();
         assertThat(result).isNotNull();
         assertEquals(200,result.getStatusCodeValue());
