@@ -56,13 +56,13 @@ public class ImageTagsControllerTest {
 
     @Test
     public void  getAllImageTagsFromService()  throws Exception{
-        List<ImageTags> mockImageTags = new ArrayList<>();
-        mockImageTags.add(firstImageTag);
-        mockImageTags.add(secondImageTag);
-        mockImageTags.add(thirdImageTag);
-        mockImageTags.add(fourthImageTag);
+        List<ImageTags> imageTags = new ArrayList<>();
+        imageTags.add(firstImageTag);
+        imageTags.add(secondImageTag);
+        imageTags.add(thirdImageTag);
+        imageTags.add(fourthImageTag);
 
-        when(imageTagsService.listAllImageTags()).thenReturn(new ResponseEntity(mockImageTags, HttpStatus.OK));
+        when(imageTagsService.listAllImageTags()).thenReturn(new ResponseEntity(imageTags, HttpStatus.OK));
         mockMvc.perform(MockMvcRequestBuilders
                 .get("http://localhost:8080/api/v1/image_tags")
                 .contentType(MediaType.APPLICATION_JSON))
