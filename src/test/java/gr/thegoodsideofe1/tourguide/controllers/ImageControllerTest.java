@@ -39,9 +39,9 @@ public class ImageControllerTest {
 
     private MockMvc mockMvc;
 
-    Image firstImageMock = new Image(1,"url_l1","desc1","title1","12345","67890",1000,"owner1","dateTaken1","url_t1");
-    Image secondImageMock = new Image(2,"url_l2","desc2","title2","212345","267890",2000,"owner2","dateTaken2","url_t2");
-    Image thirdImageMock = new Image(3,"url_l3","desc3","title3","312345","367890",3000,"owner3","dateTaken3","url_t3");
+    Image firstImage = new Image(1,"url_l1","desc1","title1","12345","67890",1000,"owner1","dateTaken1","url_t1");
+    Image secondImage = new Image(2,"url_l2","desc2","title2","212345","267890",2000,"owner2","dateTaken2","url_t2");
+    Image thirdImage = new Image(3,"url_l3","desc3","title3","312345","367890",3000,"owner3","dateTaken3","url_t3");
 
     @Before
     public void setUp(){
@@ -57,12 +57,12 @@ public class ImageControllerTest {
     @Test
     public void getAllMockImagesFromService() throws Exception{
 
-        List<Image> mockImage = new ArrayList<>();
-        mockImage.add(firstImageMock);
-        mockImage.add(secondImageMock);
-        mockImage.add(thirdImageMock);
+        List<Image> images = new ArrayList<>();
+        images.add(firstImage);
+        images.add(secondImage);
+        images.add(thirdImage);
 
-        when(imageService.listAllImages()).thenReturn(new ResponseEntity(mockImage, HttpStatus.OK));
+        when(imageService.listAllImages()).thenReturn(new ResponseEntity(images, HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("http://localhost:8080/api/v1/images")
@@ -75,7 +75,7 @@ public class ImageControllerTest {
     @Test
     public void getMockImagesById() throws Exception{
 
-        when(imageService.getImage(firstImageMock.getId())).thenReturn(new ResponseEntity(firstImageMock, HttpStatus.OK));
+        when(imageService.getImage(firstImage.getId())).thenReturn(new ResponseEntity(firstImage, HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("http://localhost:8080/api/v1/images/1")
@@ -88,7 +88,7 @@ public class ImageControllerTest {
     @Test
     public void getMockByTitle() throws Exception{
 
-        when(imageService.getImageByTitle(firstImageMock.getTitle(),1,1)).thenReturn(new ResponseEntity(firstImageMock, HttpStatus.OK));
+        when(imageService.getImageByTitle(firstImage.getTitle(),1,1)).thenReturn(new ResponseEntity(firstImage, HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("http://localhost:8080/api/v1/images/getByTitle/title1?page=1&size=1")
